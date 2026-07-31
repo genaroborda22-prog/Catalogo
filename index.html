@@ -30,7 +30,7 @@
 
         .color-filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
         .color-filters::-webkit-scrollbar { display: none; }
-        .chip { background: #e2e8f0; border: none; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; whitespace: nowrap; color: #475569; transition: all 0.2s; }
+        .chip { background: #e2e8f0; border: none; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; color: #475569; transition: all 0.2s; }
         .chip.active { background: var(--primary); color: white; }
 
         /* Grilla de productos */
@@ -71,7 +71,7 @@
     <div class="container">
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Buscar por perfume o marca (ej. Lattafa, Armaf, Le Labo)..." oninput="render()">
+                <input type="text" id="searchInput" placeholder="Buscar por marca (ej. Lattafa, Armaf, Al Haramain)..." oninput="render()">
             </div>
             <div class="color-filters" id="colorFilters">
                 <button class="chip active" onclick="filterColor('todos')">Todos</button>
@@ -103,92 +103,92 @@
     <script>
         const WHATSAPP_NUMBER = "5493364206725";
 
-        // Base de datos de perfumes (se agregan dinámicamente según la carpeta)
+        // Listado completo de las 86 fragancias limpias con sus respectivos colores y marcas principales
         const productos = [
-            { id: "1XH7-IvNhREJ4fp5Rv95SHkRdPRFOcpTo", marca: "Lattafa", nombre: "Al Qiam Gold 100ml", color: "dorado" },
-            { id: "1ZLVHNLEqeCRG0i5muf8VbUXMaRKeIcnj", marca: "Lattafa", nombre: "Confidential Private Gold 100ml", color: "dorado" },
-            { id: "16cogpQEfBaF0lHKVCkpOWMhU9G0yp40K", marca: "Armaf", nombre: "Bon Bon Delight EDP 100ml", color: "rojo" },
-            { id: "1Fqw1q2BnzFHjxBbJDioHhuoJYSvpbOoq", marca: "Le Labo", nombre: "Santal 33 EDP 100ml", color: "plata" },
-            { id: "1RXBqnPScYlcRqQqPBW4-luZXwqjmITZ3", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1335", color: "negro" },
-            { id: "1PAJm27I9qM4lcHx6oVwkY8cMV3gAmSP3", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1392", color: "azul" },
-            { id: "1zUf4lSEiKLA8zCpbWBXd-gybnVOFL9mC", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1351", color: "dorado" },
-            { id: "1dXTJ6Wnaj5QH13JT7ro1daU6TNSKWs_1", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1363", color: "plata" },
-            { id: "1ohSjWAH-NyGAZG1O9gDA-LSj9nuTnCmH", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1362", color: "negro" },
-            { id: "1fGXlB3KbfUqlNgGkRzqmj6ybDmRVtwnR", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1365", color: "verde" },
-            { id: "1Ye-269Cgnq7YHMdoP56hgTvbinPBv1jy", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1336", color: "rojo" },
-            { id: "1X1LmHCOz00bq9kJcj4Pmr8dwCbwZwB9B", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1344", color: "azul" },
-            { id: "140PuhMxhi6bDdw_MMtrVEjPQTqRi6p7-", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1356", color: "dorado" },
-            { id: "10qtaxJ3hulQxBsBa-M2nYbkW7Q1GhZTl", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1353", color: "negro" },
-            { id: "1y-EK4JKhBWcJ7d4tS4BnqKq5q5CR84uo", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1369", color: "plata" },
-            { id: "1A-BSwfntvoQ3n6U0aZlNbKGguc7GctcE", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1367", color: "rojo" },
-            { id: "16GEbIXpg_erlx1gnTqzJKKDH71ux4uYG", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1366", color: "verde" },
-            { id: "1PdGGjlWtjWSrYyZEgfV9gQJVWkSG8XvN", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1418", color: "azul" },
-            { id: "1ur9LATG-6IM1qCa5NYb1h1nwtrU7NLAR", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1401", color: "dorado" },
-            { id: "18xf-tcNEwYzb_QilopB9WNCeL6lHJxRL", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1364", color: "negro" },
-            { id: "19BhjOsr48y5s_2jeWNm7VcheuyUyZnvx", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1359", color: "plata" },
-            { id: "1Bje1J1gb1osCtpjLykxbpvm8fQEndyG2", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1347", color: "rojo" },
-            { id: "1D-S5rj9GXZMqeXW5zEYBTqnyakbM-EbR", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1361", color: "verde" },
-            { id: "10KnnemsVEJBf655316YxFqr-yQukFRhw", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1352", color: "azul" },
-            { id: "1e3sRtYsQesMC70jsp9afrihOifcHbAob", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1357", color: "dorado" },
-            { id: "1FrtzSK9wRq1oXOxWrS7vgQDAL6Bj3EcY", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1368", color: "negro" },
-            { id: "1nKDMNB_3JllH9IgyXvEC6jVp6qDTRI5B", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1355", color: "plata" },
-            { id: "19Rz4Hd83FLxlEBImT6zTyl8Sj2B0WQhl", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1376", color: "rojo" },
-            { id: "1b9-O4tc7hLsFOaJvS1r1EWF9N8T4USvd", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1370", color: "verde" },
-            { id: "1bnKrs0otJ8AYTRqeAdwBZ5ERcnVORFUB", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1340", color: "azul" },
-            { id: "1Svr6DCYuWX9vLRQHK2PgjdyBsYcYQ57j", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1408", color: "dorado" },
-            { id: "1vq_tiXWzyeI9ixtinuF9LpyMg_LBFJN6", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1387", color: "negro" },
-            { id: "1UkRJYHTqt001aNgic3ARHOtnSiZqOn4g", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1375", color: "plata" },
-            { id: "1ztf5NcN6tm1ea4K50Wm7YdgSmwxgYvv-", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1379", color: "rojo" },
-            { id: "1ROt-IciUsQkkQQQVCzxf1vpjCM-Phc7w", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1337", color: "verde" },
-            { id: "1bjFSiLw7l_OplEd3rg_MLA4KDtW2eNUM", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1341", color: "azul" },
-            { id: "1jPAU8pDPWJNwolo0n2eqx56OdEAU11ee", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1397", color: "dorado" },
-            { id: "1t2trIa__088uwwi1hauZxCtbbx7CVoHP", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1389", color: "negro" },
-            { id: "11SXLDRrn9HQgxKPwWsQrYhyCcI7zQ_BT", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1373", color: "plata" },
-            { id: "17ih_IcIil5ahDD-YXFevgKatkvbS5qO0", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1415", color: "rojo" },
-            { id: "1YG14YOIsiMJMezou1_kq9kBz_L9IXTjm", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1382", color: "verde" },
-            { id: "1gIGziC1bz-ZWpSoi8AvV4rMDEe72GvmW", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1409", color: "azul" },
-            { id: "1ZO2O7h6SLE2BNN3IXYo0Zh6sD_Usal9S", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1411", color: "dorado" },
-            { id: "1uQtvULia3Afz-IWqmnTIrZb9m3PDw4WP", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1371", color: "negro" },
-            { id: "1tgvSdUVV84RI0LUmZ-uN_82Zr-n513rp", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1385", color: "plata" },
-            { id: "1MF9f-HzQsRev8M0HvVmmNzOJy1dGxnP2", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1381", color: "rojo" },
-            { id: "1Dmh73mPH4k1QbTo_CM_bhjZVAYrtf788", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1391", color: "verde" },
-            { id: "1WHOHvz3ebZVmMrz3muJ46mQHv2t_4n_K", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1342", color: "azul" },
-            { id: "1mZHaDbqOsMJbU6PSY0AyE2WhwtLpjr6p", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1407", color: "dorado" },
-            { id: "1ZSu6hgbHWDE4h4Ke_3ULnsk83plk4PSm", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1406", color: "negro" },
-            { id: "1pP_vikLqiJOMwxxoTohPcFpAjqP0WENj", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1414", color: "plata" },
-            { id: "14Xq-b8NkT_tZQXG9sUX9hAsOnTdnzJw9", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1420", color: "rojo" },
-            { id: "1dhykyt_wixsAF849Aq8DIw4_RIA4tId0", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1349", color: "verde" },
-            { id: "1O2zCa3HMjPPVLWD2zXrDsqfmNap1IqGF", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1383", color: "azul" },
-            { id: "1dLrK6kBYXa4yac7GGHwDP2OxAokrYdDz", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1416", color: "dorado" },
-            { id: "11zWld6tc-Xx025VFLADe8z2vkzw5UTzG", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1372", color: "negro" },
-            { id: "1HhiWfTRBAl_tZhFxO2WNfwWpgfalexbr", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1374", color: "plata" },
-            { id: "1wfYITvFN9jbAK8Xlnpp7iR3DIsUlycba", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1384", color: "rojo" },
-            { id: "1TR0rNPo6erk0fZJe4srIEjYRaImMj0L1", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1338", color: "verde" },
-            { id: "1Y0RYUko829krq_l0BNLojK29SbVAsudp", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1346", color: "azul" },
-            { id: "1Txw7RpzJPMyQwEKHwusXVqchZc1V85N1", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1350", color: "dorado" },
-            { id: "1CZ7skepI-iF5Y26RfaEN0YDQCTsQtHzL", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1378", color: "negro" },
-            { id: "1DoF5ag7MjaHykjuyt9VX3wcOV7PT9vdM", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1404", color: "plata" },
-            { id: "1aTqX4GYJt6ZS8Dzd1Dj9udYMQ7xbTmep", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1410", color: "rojo" },
-            { id: "1MiVIqvSZJE0HKgIc0brhGpKdbBpn7A3m", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1393", color: "verde" },
-            { id: "1OEia9CjjMtmMnYgzs9SesX5s7QFaps5-", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1403", color: "azul" },
-            { id: "1Q2dnr99CiHtodOmQn5Z6Seff2M1LMmus", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1345", color: "dorado" },
-            { id: "1ju-TvcbV14vJzHbEmAG7IavhU9uAyPPc", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1412", color: "negro" },
-            { id: "1c0UgwHr6_Z6LfLn8b_bpymjGDd5ibZbc", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1380", color: "plata" },
-            { id: "1e7lQzYlkPvHY80qT7-hrspmm1ywyvbY_", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1394", color: "rojo" },
-            { id: "1cxlxy05_YDsuO7INJMQNpkqvw6zT9tJl", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1419", color: "verde" },
-            { id: "1oY4zBgqSGWADuW-kchwzMNKjEgepxBd8", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1413", color: "azul" },
-            { id: "1GTmiiogZ0F1IzOFIpCfIfuyIKRNCoI-G", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1377", color: "dorado" },
-            { id: "1uX_yv6q6MUEp6vKpAIL5i726rDwb2gtN", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1405", color: "negro" },
-            { id: "1fWZ4zFgpMf-Jk_oMGMTW-0bNf8_jDn-B", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1402", color: "plata" },
-            { id: "1_sCs1j2M5mj0fKHJsJfq5-tPpAdZHC_Y", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1400", color: "rojo" },
-            { id: "1gyW5fecbidBYSVMpLonEt5RjCF2O2wMi", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1388", color: "verde" },
-            { id: "1zUabqLHMyU2MvXJH-BStrO14oAJ12IhX", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1396", color: "azul" },
-            { id: "1u9yO-dPLgRKcUIOqi_zillwJ5PhANs3R", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1390", color: "dorado" },
-            { id: "1g0JJ8WB-RapYVH_Y16i4y2FMVvB1-td7", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1395", color: "negro" },
-            { id: "1WGvLUGXIGU_ArCXLs8UuyJ0qmM3WxS4m", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1343", color: "plata" },
-            { id: "1cX_kVTmNZX6xp_5bVKiQiZgmUZnwRyjk", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1386", color: "rojo" },
-            { id: "1NR6ixEPwgivrR8Q_ilSVyILFsUEbreZP", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1417", color: "verde" },
-            { id: "1vJcU9yS1qCrC3FKoG5m3B86_g52QzxsG", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1398", color: "azul" }
+            { id: "1XH7-IvNhREJ4fp5Rv95SHkRdPRFOcpTo", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "1ZLVHNLEqeCRG0i5muf8VbUXMaRKeIcnj", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "16cogpQEfBaF0lHKVCkpOWMhU9G0yp40K", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1Fqw1q2BnzFHjxBbJDioHhuoJYSvpbOoq", marca: "Le Labo", nombre: "Fragancia Exclusiva Importada", color: "plata" },
+            { id: "1RXBqnPScYlcRqQqPBW4-luZXwqjmITZ3", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "negro" },
+            { id: "1PAJm27I9qM4lcHx6oVwkY8cMV3gAmSP3", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "1zUf4lSEiKLA8zCpbWBXd-gybnVOFL9mC", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "1dXTJ6Wnaj5QH13JT7ro1daU6TNSKWs_1", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "plata" },
+            { id: "1ohSjWAH-NyGAZG1O9gDA-LSj9nuTnCmH", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "1fGXlB3KbfUqlNgGkRzqmj6ybDmRVtwnR", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "1Ye-269Cgnq7YHMdoP56hgTvbinPBv1jy", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1X1LmHCOz00bq9kJcj4Pmr8dwCbwZwB9B", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "140PuhMxhi6bDdw_MMtrVEjPQTqRi6p7-", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "10qtaxJ3hulQxBsBa-M2nYbkW7Q1GhZTl", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "1y-EK4JKhBWcJ7d4tS4BnqKq5q5CR84uo", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
+            { id: "1A-BSwfntvoQ3n6U0aZlNbKGguc7GctcE", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "16GEbIXpg_erlx1gnTqzJKKDH71ux4uYG", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "1PdGGjlWtjWSrYyZEgfV9gQJVWkSG8XvN", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "1ur9LATG-6IM1qCa5NYb1h1nwtrU7NLAR", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "18xf-tcNEwYzb_QilopB9WNCeL6lHJxRL", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "19BhjOsr48y5s_2jeWNm7VcheuyUyZnvx", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
+            { id: "1Bje1J1gb1osCtpjLykxbpvm8fQEndyG2", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1D-S5rj9GXZMqeXW5zEYBTqnyakbM-EbR", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "10KnnemsVEJBf655316YxFqr-yQukFRhw", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "1e3sRtYsQesMC70jsp9afrihOifcHbAob", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "1FrtzSK9wRq1oXOxWrS7vgQDAL6Bj3EcY", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "1nKDMNB_3JllH9IgyXvEC6jVp6qDTRI5B", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
+            { id: "19Rz4Hd83FLxlEBImT6zTyl8Sj2B0WQhl", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1b9-O4tc7hLsFOaJvS1r1EWF9N8T4USvd", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "1bnKrs0otJ8AYTRqeAdwBZ5ERcnVORFUB", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "1Svr6DCYuWX9vLRQHK2PgjdyBsYcYQ57j", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "1vq_tiXWzyeI9ixtinuF9LpyMg_LBFJN6", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "1UkRJYHTqt001aNgic3ARHOtnSiZqOn4g", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
+            { id: "1ztf5NcN6tm1ea4K50Wm7YdgSmwxgYvv-", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1ROt-IciUsQkkQQQVCzxf1vpjCM-Phc7w", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "1bjFSiLw7l_OplEd3rg_MLA4KDtW2eNUM", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "1jPAU8pDPWJNwolo0n2eqx56OdEAU11ee", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "1t2trIa__088uwwi1hauZxCtbbx7CVoHP", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "11SXLDRrn9HQgxKPwWsQrYhyCcI7zQ_BT", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
+            { id: "17ih_IcIil5ahDD-YXFevgKatkvbS5qO0", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1YG14YOIsiMJMezou1_kq9kBz_L9IXTjm", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "1gIGziC1bz-ZWpSoi8AvV4rMDEe72GvmW", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "1ZO2O7h6SLE2BNN3IXYo0Zh6sD_Usal9S", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "1uQtvULia3Afz-IWqmnTIrZb9m3PDw4WP", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "1tgvSdUVV84RI0LUmZ-uN_82Zr-n513rp", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
+            { id: "1MF9f-HzQsRev8M0HvVmmNzOJy1dGxnP2", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1Dmh73mPH4k1QbTo_CM_bhjZVAYrtf788", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "1WHOHvz3ebZVmMrz3muJ46mQHv2t_4n_K", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "1mZHaDbqOsMJbU6PSY0AyE2WhwtLpjr6p", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "1ZSu6hgbHWDE4h4Ke_3ULnsk83plk4PSm", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "1pP_vikLqiJOMwxxoTohPcFpAjqP0WENj", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
+            { id: "14Xq-b8NkT_tZQXG9sUX9hAsOnTdnzJw9", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1dhykyt_wixsAF849Aq8DIw4_RIA4tId0", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "1O2zCa3HMjPPVLWD2zXrDsqfmNap1IqGF", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "1dLrK6kBYXa4yac7GGHwDP2OxAokrYdDz", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "11zWld6tc-Xx025VFLADe8z2vkzw5UTzG", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "1HhiWfTRBAl_tZhFxO2WNfwWpgfalexbr", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
+            { id: "1wfYITvFN9jbAK8Xlnpp7iR3DIsUlycba", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1TR0rNPo6erk0fZJe4srIEjYRaImMj0L1", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "1Y0RYUko829krq_l0BNLojK29SbVAsudp", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "1Txw7RpzJPMyQwEKHwusXVqchZc1V85N1", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "1CZ7skepI-iF5Y26RfaEN0YDQCTsQtHzL", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "1DoF5ag7MjaHykjuyt9VX3wcOV7PT9vdM", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
+            { id: "1aTqX4GYJt6ZS8Dzd1Dj9udYMQ7xbTmep", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1MiVIqvSZJE0HKgIc0brhGpKdbBpn7A3m", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "1OEia9CjjMtmMnYgzs9SesX5s7QFaps5-", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "1Q2dnr99CiHtodOmQn5Z6Seff2M1LMmus", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "1ju-TvcbV14vJzHbEmAG7IavhU9uAyPPc", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "1c0UgwHr6_Z6LfLn8b_bpymjGDd5ibZbc", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
+            { id: "1e7lQzYlkPvHY80qT7-hrspmm1ywyvbY_", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1cxlxy05_YDsuO7INJMQNpkqvw6zT9tJl", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "1oY4zBgqSGWADuW-kchwzMNKjEgepxBd8", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "1GTmiiogZ0F1IzOFIpCfIfuyIKRNCoI-G", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "1uX_yv6q6MUEp6vKpAIL5i726rDwb2gtN", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "1fWZ4zFgpMf-Jk_oMGMTW-0bNf8_jDn-B", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
+            { id: "1_sCs1j2M5mj0fKHJsJfq5-tPpAdZHC_Y", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1gyW5fecbidBYSVMpLonEt5RjCF2O2wMi", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "1zUabqLHMyU2MvXJH-BStrO14oAJ12IhX", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
+            { id: "1u9yO-dPLgRKcUIOqi_zillwJ5PhANs3R", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
+            { id: "1g0JJ8WB-RapYVH_Y16i4y2FMVvB1-td7", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
+            { id: "1WGvLUGXIGU_ArCXLs8UuyJ0qmM3WxS4m", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
+            { id: "1cX_kVTmNZX6xp_5bVKiQiZgmUZnwRyjk", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
+            { id: "1NR6ixEPwgivrR8Q_ilSVyILFsUEbreZP", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
+            { id: "1vJcU9yS1qCrC3FKoG5m3B86_g52QzxsG", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" }
         ];
 
         let selectedCart = [];
@@ -229,7 +229,7 @@
             let mensaje = "¡Hola! Quisiera encargar los siguientes perfumes:\n\n";
             selectedCart.forEach((id, index) => {
                 const prod = productos.find(p => p.id === id);
-                mensaje += `${index + 1}. *${prod.marca}* - ${prod.nombre}\n`;
+                mensaje += `${index + 1}. *${prod.marca}* - ${prod.nombre} (Ref: ${id.substring(0, 6)})\n`;
             });
 
             mensaje += "\nPor favor, pásame el total e información de CBU/Alias para realizar la transferencia.";
@@ -244,7 +244,7 @@
             grid.innerHTML = "";
 
             const filtered = productos.filter(p => {
-                const matchesSearch = p.nombre.toLowerCase().includes(search) || p.marca.toLowerCase().includes(search);
+                const matchesSearch = p.marca.toLowerCase().includes(search) || p.nombre.toLowerCase().includes(search);
                 const matchesColor = activeColorFilter === 'todos' || p.color === activeColorFilter;
                 return matchesSearch && matchesColor;
             });
@@ -255,7 +255,7 @@
 
                 grid.innerHTML += `
                     <div class="card">
-                        <img src="${imgUrl}" alt="${p.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Cargando'">
+                        <img src="${imgUrl}" alt="${p.marca}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Perfume'">
                         <div class="card-body">
                             <span class="card-brand">${p.marca}</span>
                             <div class="card-title">${p.nombre}</div>
