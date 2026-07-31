@@ -23,10 +23,12 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
 
         /* Controles y Filtros */
-        .controls { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
-        .search-box { width: 100%; }
-        .search-box input { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; outline: none; transition: border 0.2s; }
-        .search-box input:focus { border-color: var(--primary); }
+        .controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+        .filter-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .search-box { flex: 1; min-width: 200px; }
+        .search-box input, .brand-select select { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; outline: none; background: white; transition: border 0.2s; }
+        .search-box input:focus, .brand-select select:focus { border-color: var(--primary); }
+        .brand-select { min-width: 180px; }
 
         .color-filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
         .color-filters::-webkit-scrollbar { display: none; }
@@ -70,9 +72,22 @@
 
     <div class="container">
         <div class="controls">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Buscar por marca (ej. Lattafa, Armaf, Al Haramain)..." oninput="render()">
+            <div class="filter-row">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Buscar por palabra..." oninput="render()">
+                </div>
+                <div class="brand-select">
+                    <select id="brandSelect" onchange="render()">
+                        <option value="todas">Todas las marcas</option>
+                        <option value="Lattafa">Lattafa</option>
+                        <option value="Armaf">Armaf</option>
+                        <option value="Al Haramain">Al Haramain</option>
+                        <option value="Maison Alhambra">Maison Alhambra</option>
+                        <option value="Le Labo">Le Labo</option>
+                    </select>
+                </div>
             </div>
+            
             <div class="color-filters" id="colorFilters">
                 <button class="chip active" onclick="filterColor('todos')">Todos</button>
                 <button class="chip" onclick="filterColor('dorado')">✨ Dorado / Oro</button>
@@ -103,7 +118,6 @@
     <script>
         const WHATSAPP_NUMBER = "5493364206725";
 
-        // Listado completo de las 86 fragancias limpias con sus respectivos colores y marcas principales
         const productos = [
             { id: "1XH7-IvNhREJ4fp5Rv95SHkRdPRFOcpTo", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
             { id: "1ZLVHNLEqeCRG0i5muf8VbUXMaRKeIcnj", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
@@ -229,7 +243,7 @@
             let mensaje = "¡Hola! Quisiera encargar los siguientes perfumes:\n\n";
             selectedCart.forEach((id, index) => {
                 const prod = productos.find(p => p.id === id);
-                mensaje += `${index + 1}. *${prod.marca}* - ${prod.nombre} (Ref: ${id.substring(0, 6)})\n`;
+                mensaje += `${index + 1}. *${prod.marca}* - ${prod.nombre}\n`;
             });
 
             mensaje += "\nPor favor, pásame el total e información de CBU/Alias para realizar la transferencia.";
@@ -240,13 +254,15 @@
 
         function render() {
             const search = document.getElementById('searchInput').value.toLowerCase();
+            const selectedBrand = document.getElementById('brandSelect').value;
             const grid = document.getElementById('productGrid');
             grid.innerHTML = "";
 
             const filtered = productos.filter(p => {
                 const matchesSearch = p.marca.toLowerCase().includes(search) || p.nombre.toLowerCase().includes(search);
+                const matchesBrand = selectedBrand === 'todas' || p.marca === selectedBrand;
                 const matchesColor = activeColorFilter === 'todos' || p.color === activeColorFilter;
-                return matchesSearch && matchesColor;
+                return matchesSearch && matchesBrand && matchesColor;
             });
 
             filtered.forEach(p => {
