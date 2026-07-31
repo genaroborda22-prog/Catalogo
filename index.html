@@ -3,288 +3,389 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Perfumes Importados</title>
+    <title>Catálogo Completo de Perfumes</title>
     <style>
         :root {
-            --primary: #0f172a;
-            --accent: #25d366;
-            --accent-dark: #1da851;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent-color: #d4af37;
+            --border-color: #333;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); padding-bottom: 90px; }
-        
-        header { background: var(--primary); color: white; text-align: center; padding: 30px 15px; }
-        header h1 { font-size: 26px; margin-bottom: 8px; font-weight: 700; }
-        header p { font-size: 14px; opacity: 0.85; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
 
-        /* Controles y Filtros */
-        .controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
-        .filter-row { display: flex; gap: 10px; flex-wrap: wrap; }
-        .search-box { flex: 1; min-width: 200px; }
-        .search-box input, .brand-select select { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; outline: none; background: white; transition: border 0.2s; }
-        .search-box input:focus, .brand-select select:focus { border-color: var(--primary); }
-        .brand-select { min-width: 180px; }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
 
-        .color-filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
-        .color-filters::-webkit-scrollbar { display: none; }
-        .chip { background: #e2e8f0; border: none; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; color: #475569; transition: all 0.2s; }
-        .chip.active { background: var(--primary); color: white; }
+        header h1 {
+            color: var(--accent-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
 
-        /* Grilla de productos */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        @media (min-width: 640px) { .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; } }
+        header p {
+            color: #888;
+            font-size: 1.1rem;
+        }
 
-        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; flex-direction: column; transition: transform 0.2s; border: 1px solid #f1f5f9; }
-        .card:hover { transform: translateY(-2px); }
-        .card img { width: 100%; height: 180px; object-fit: cover; background: #f1f5f9; }
-        @media (min-width: 640px) { .card img { height: 230px; } }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            text-align: center;
+        }
 
-        .card-body { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
-        .card-brand { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.5px; }
-        .card-title { font-size: 14px; font-weight: 600; margin: 4px 0 12px; color: var(--text); line-height: 1.3; }
-        
-        .btn-add { margin-top: auto; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .btn-add:hover { background: #334155; }
-        .btn-add.added { background: #16a34a; }
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 1rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            color: var(--text-color);
+            outline: none;
+            transition: border-color 0.3s;
+        }
 
-        /* Info extra / FAQ */
-        .info-section { margin-top: 40px; background: white; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; }
-        .info-section h3 { font-size: 16px; margin-bottom: 10px; color: var(--primary); }
-        .info-section p { font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 8px; }
+        .search-input:focus {
+            border-color: var(--accent-color);
+        }
 
-        /* Carrito flotante de WhatsApp */
-        .cart-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; width: calc(100% - 30px); max-width: 500px; padding: 14px 20px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4); cursor: pointer; text-decoration: none; font-weight: 700; font-size: 15px; z-index: 100; transition: transform 0.2s; }
-        .cart-bar:hover { background: var(--accent-dark); transform: translateX(-50%) scale(1.02); }
-        .cart-count { background: white; color: var(--accent); padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 800; }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .perfume-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .perfume-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(212, 175, 55, 0.15);
+            border-color: var(--accent-color);
+        }
+
+        .perfume-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            min-width: 40px;
+        }
+
+        .perfume-name {
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Catálogo de Perfumes</h1>
-        <p>Seleccioná tus fragancias y encargalas directamente por WhatsApp</p>
+        <p>Inventario general con los 245 perfumes registrados</p>
     </header>
 
-    <div class="container">
-        <div class="controls">
-            <div class="filter-row">
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Buscar por palabra..." oninput="render()">
-                </div>
-                <div class="brand-select">
-                    <select id="brandSelect" onchange="render()">
-                        <option value="todas">Todas las marcas</option>
-                        <option value="Lattafa">Lattafa</option>
-                        <option value="Armaf">Armaf</option>
-                        <option value="Al Haramain">Al Haramain</option>
-                        <option value="Maison Alhambra">Maison Alhambra</option>
-                        <option value="Le Labo">Le Labo</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="color-filters" id="colorFilters">
-                <button class="chip active" onclick="filterColor('todos')">Todos</button>
-                <button class="chip" onclick="filterColor('dorado')">✨ Dorado / Oro</button>
-                <button class="chip" onclick="filterColor('negro')">🖤 Negro / Oscuro</button>
-                <button class="chip" onclick="filterColor('azul')">💙 Azul / Celeste</button>
-                <button class="chip" onclick="filterColor('plata')">🤍 Plata / Transparente</button>
-                <button class="chip" onclick="filterColor('rojo')">❤️ Rojo / Rosa</button>
-                <button class="chip" onclick="filterColor('verde')">💚 Verde / Marrón</button>
-            </div>
-        </div>
-
-        <div class="grid" id="productGrid"></div>
-
-        <div class="info-section">
-            <h3>💳 ¿Cómo realizás tu encargo?</h3>
-            <p>1. Añadí todos los perfumes que quieras al carrito.</p>
-            <p>2. Tocá el botón verde para enviarnos la lista por WhatsApp.</p>
-            <p>3. Te responderemos con la confirmación de stock, importe total y el CBU/Alias para que realices la transferencia.</p>
-        </div>
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar perfume por nombre o marca..." onkeyup="filterPerfumes()">
     </div>
 
-    <!-- Botón Flotante -->
-    <a id="cartBar" class="cart-bar" style="display:none;" onclick="sendWhatsApp()">
-        <span>🛒 Enviar Encargo por WhatsApp</span>
-        <span class="cart-count" id="cartCount">0</span>
-    </a>
+    <div class="grid-container" id="perfumeGrid">
+        <!-- Los elementos se cargan dinámicamente o de forma estática a continuación -->
+        <div class="perfume-card"><span class="perfume-number">1</span><span class="perfume-name">Afnan 9PM</span></div>
+        <div class="perfume-card"><span class="perfume-number">2</span><span class="perfume-name">Afnan 9PM Rebel</span></div>
+        <div class="perfume-card"><span class="perfume-number">3</span><span class="perfume-name">Afnan 9PK</span></div>
+        <div class="perfume-card"><span class="perfume-number">4</span><span class="perfume-name">Al Haramain Amber Oud Aqua Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">5</span><span class="perfume-name">Al Haramain Amber Oud Bleu Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">6</span><span class="perfume-name">Al Haramain Amber Oud Carbon Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">7</span><span class="perfume-name">Al Haramain Amber Oud Dubai Night</span></div>
+        <div class="perfume-card"><span class="perfume-number">8</span><span class="perfume-name">Al Haramain Amber Oud Gold Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">9</span><span class="perfume-name">Al Haramain Amber Oud Gold Edition Extreme</span></div>
+        <div class="perfume-card"><span class="perfume-number">10</span><span class="perfume-name">Al Haramain Amber Oud Private Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">11</span><span class="perfume-name">Al Haramain Amber Oud Rose Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">12</span><span class="perfume-name">Al Haramain Amber Oud Ruby Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">13</span><span class="perfume-name">Al Haramain Amber Oud Tobacco Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">14</span><span class="perfume-name">Al Haramain Amber Oud Ultra Violet</span></div>
+        <div class="perfume-card"><span class="perfume-number">15</span><span class="perfume-name">Al Haramain Amber Oud White Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">16</span><span class="perfume-name">Al Haramain L'Aventure</span></div>
+        <div class="perfume-card"><span class="perfume-number">17</span><span class="perfume-name">Al Haramain L'Aventure Blanche</span></div>
+        <div class="perfume-card"><span class="perfume-number">18</span><span class="perfume-name">Al Haramain L'Aventure Femme</span></div>
+        <div class="perfume-card"><span class="perfume-number">19</span><span class="perfume-name">Al Haramain L'Aventure Knight</span></div>
+        <div class="perfume-card"><span class="perfume-number">20</span><span class="perfume-name">Al Haramain Portfolio Neroli Canvas</span></div>
+        <div class="perfume-card"><span class="perfume-number">21</span><span class="perfume-name">Al Qiam Silver Lattafa Pride</span></div>
+        <div class="perfume-card"><span class="perfume-number">22</span><span class="perfume-name">Al Noble Ameer Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">23</span><span class="perfume-name">Ameer Al Arab</span></div>
+        <div class="perfume-card"><span class="perfume-number">24</span><span class="perfume-name">Ameer Al Arab Prince of Arabia</span></div>
+        <div class="perfume-card"><span class="perfume-number">25</span><span class="perfume-name">Ansaam Silver Lattafa Pride</span></div>
+        <div class="perfume-card"><span class="perfume-number">26</span><span class="perfume-name">Armaf Bucephalus No. IX</span></div>
+        <div class="perfume-card"><span class="perfume-number">27</span><span class="perfume-name">Armaf Bucephalus No. X</span></div>
+        <div class="perfume-card"><span class="perfume-number">28</span><span class="perfume-name">Armaf Bucephalus No. XI</span></div>
+        <div class="perfume-card"><span class="perfume-number">29</span><span class="perfume-name">Armaf Club de Nuit Iconic</span></div>
+        <div class="perfume-card"><span class="perfume-number">30</span><span class="perfume-name">Armaf Club de Nuit Imperiale</span></div>
+        <div class="perfume-card"><span class="perfume-number">31</span><span class="perfume-name">Armaf Club de Nuit Intense Man</span></div>
+        <div class="perfume-card"><span class="perfume-number">32</span><span class="perfume-name">Armaf Club de Nuit Lionheart</span></div>
+        <div class="perfume-card"><span class="perfume-number">33</span><span class="perfume-name">Armaf Club de Nuit Maleka</span></div>
+        <div class="perfume-card"><span class="perfume-number">34</span><span class="perfume-name">Armaf Club de Nuit Milestone</span></div>
+        <div class="perfume-card"><span class="perfume-number">35</span><span class="perfume-name">Armaf Club de Nuit Private Key To My Life</span></div>
+        <div class="perfume-card"><span class="perfume-number">36</span><span class="perfume-name">Armaf Club de Nuit Private Key To My Paris</span></div>
+        <div class="perfume-card"><span class="perfume-number">37</span><span class="perfume-name">Armaf Club de Nuit Private Key To My Soul</span></div>
+        <div class="perfume-card"><span class="perfume-number">38</span><span class="perfume-name">Armaf Club de Nuit Sillage</span></div>
+        <div class="perfume-card"><span class="perfume-number">39</span><span class="perfume-name">Armaf Club de Nuit Untold</span></div>
+        <div class="perfume-card"><span class="perfume-number">40</span><span class="perfume-name">Armaf Club de Nuit Urban Man</span></div>
+        <div class="perfume-card"><span class="perfume-number">41</span><span class="perfume-name">Armaf Club de Nuit Urban Man Elixir</span></div>
+        <div class="perfume-card"><span class="perfume-number">42</span><span class="perfume-name">Armaf Dailights Sunset Glow</span></div>
+        <div class="perfume-card"><span class="perfume-number">43</span><span class="perfume-name">Armaf Derby Club House Blanche</span></div>
+        <div class="perfume-card"><span class="perfume-number">44</span><span class="perfume-name">Armaf Derby Club House Gold Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">45</span><span class="perfume-name">Armaf Derby Club House Hunter</span></div>
+        <div class="perfume-card"><span class="perfume-number">46</span><span class="perfume-name">Armaf Italiano Donna</span></div>
+        <div class="perfume-card"><span class="perfume-number">47</span><span class="perfume-name">Armaf Italiano Nero</span></div>
+        <div class="perfume-card"><span class="perfume-number">48</span><span class="perfume-name">Armaf Radical Blue</span></div>
+        <div class="perfume-card"><span class="perfume-number">49</span><span class="perfume-name">Armaf Radical Brown</span></div>
+        <div class="perfume-card"><span class="perfume-number">50</span><span class="perfume-name">Armaf Tag-Her</span></div>
+        <div class="perfume-card"><span class="perfume-number">51</span><span class="perfume-name">Armaf Tag-Her Prestige</span></div>
+        <div class="perfume-card"><span class="perfume-number">52</span><span class="perfume-name">Asad Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">53</span><span class="perfume-name">Asad Bourbon Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">54</span><span class="perfume-name">Asad Lattafa Gold Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">55</span><span class="perfume-name">Asad Zanzibar Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">56</span><span class="perfume-name">Azzure Aoud</span></div>
+        <div class="perfume-card"><span class="perfume-number">57</span><span class="perfume-name">Bade'e Al Oud Amethyst</span></div>
+        <div class="perfume-card"><span class="perfume-number">58</span><span class="perfume-name">Bade'e Al Oud Honor & Glory</span></div>
+        <div class="perfume-card"><span class="perfume-number">59</span><span class="perfume-name">Bade'e Al Oud Noble Blush</span></div>
+        <div class="perfume-card"><span class="perfume-number">60</span><span class="perfume-name">Bade'e Al Oud Oud for Glory</span></div>
+        <div class="perfume-card"><span class="perfume-number">61</span><span class="perfume-name">Bade'e Al Oud Sublime</span></div>
+        <div class="perfume-card"><span class="perfume-number">62</span><span class="perfume-name">Bharara Chocolate</span></div>
+        <div class="perfume-card"><span class="perfume-number">63</span><span class="perfume-name">Bharara King</span></div>
+        <div class="perfume-card"><span class="perfume-number">64</span><span class="perfume-name">Bharara King Gold Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">65</span><span class="perfume-name">Bharara King Platinum</span></div>
+        <div class="perfume-card"><span class="perfume-number">66</span><span class="perfume-name">Bharara Viking Cairo</span></div>
+        <div class="perfume-card"><span class="perfume-number">67</span><span class="perfume-name">Bharara Viking Kashmir</span></div>
+        <div class="perfume-card"><span class="perfume-number">68</span><span class="perfume-name">Bharara Viking Soul</span></div>
+        <div class="perfume-card"><span class="perfume-number">69</span><span class="perfume-name">Emaan Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">70</span><span class="perfume-name">Emeer Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">71</span><span class="perfume-name">Fakhar Lattafa Black</span></div>
+        <div class="perfume-card"><span class="perfume-number">72</span><span class="perfume-name">Fakhar Lattafa Extrait</span></div>
+        <div class="perfume-card"><span class="perfume-number">73</span><span class="perfume-name">Fakhar Lattafa Gold Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">74</span><span class="perfume-name">Fakhar Lattafa Silver</span></div>
+        <div class="perfume-card"><span class="perfume-number">75</span><span class="perfume-name">French Avenue Aether Extrait</span></div>
+        <div class="perfume-card"><span class="perfume-number">76</span><span class="perfume-name">French Avenue Bouquet of Euphoria</span></div>
+        <div class="perfume-card"><span class="perfume-number">77</span><span class="perfume-name">French Avenue Forbidden Fruit</span></div>
+        <div class="perfume-card"><span class="perfume-number">78</span><span class="perfume-name">French Avenue Irida Extrait</span></div>
+        <div class="perfume-card"><span class="perfume-number">79</span><span class="perfume-name">French Avenue Liquid Brun</span></div>
+        <div class="perfume-card"><span class="perfume-number">80</span><span class="perfume-name">French Avenue Sun Kissed</span></div>
+        <div class="perfume-card"><span class="perfume-number">81</span><span class="perfume-name">French Avenue Teas Me</span></div>
+        <div class="perfume-card"><span class="perfume-number">82</span><span class="perfume-name">French Avenue Luscious</span></div>
+        <div class="perfume-card"><span class="perfume-number">83</span><span class="perfume-name">Give Me Gourmand Berry On Top</span></div>
+        <div class="perfume-card"><span class="perfume-number">84</span><span class="perfume-name">Give Me Gourmand Choco Overdose</span></div>
+        <div class="perfume-card"><span class="perfume-number">85</span><span class="perfume-name">Give Me Gourmand Mallow Madness</span></div>
+        <div class="perfume-card"><span class="perfume-number">86</span><span class="perfume-name">Give Me Gourmand Marshmallow Blush</span></div>
+        <div class="perfume-card"><span class="perfume-number">87</span><span class="perfume-name">Give Me Gourmand Vanilla Crush</span></div>
+        <div class="perfume-card"><span class="perfume-number">88</span><span class="perfume-name">Give Me Gourmand Whipped Pleasure</span></div>
+        <div class="perfume-card"><span class="perfume-number">89</span><span class="perfume-name">Haramain Amber Oud</span></div>
+        <div class="perfume-card"><span class="perfume-number">90</span><span class="perfume-name">Hawas For Him</span></div>
+        <div class="perfume-card"><span class="perfume-number">91</span><span class="perfume-name">Hawas For Him Eclat</span></div>
+        <div class="perfume-card"><span class="perfume-number">92</span><span class="perfume-name">Hawas For Him Ice</span></div>
+        <div class="perfume-card"><span class="perfume-number">93</span><span class="perfume-name">Hawas For Him Kobra</span></div>
+        <div class="perfume-card"><span class="perfume-number">94</span><span class="perfume-name">Hawas For Him Malibu</span></div>
+        <div class="perfume-card"><span class="perfume-number">95</span><span class="perfume-name">Hawas For Him Pink</span></div>
+        <div class="perfume-card"><span class="perfume-number">96</span><span class="perfume-name">Hawas For Him Tropical</span></div>
+        <div class="perfume-card"><span class="perfume-number">97</span><span class="perfume-name">Hawas For Him Elixir</span></div>
+        <div class="perfume-card"><span class="perfume-number">98</span><span class="perfume-name">Hawas For Him Viper</span></div>
+        <div class="perfume-card"><span class="perfume-number">99</span><span class="perfume-name">Haya Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">100</span><span class="perfume-name">Hayaati Al Malaky</span></div>
+        <div class="perfume-card"><span class="perfume-number">101</span><span class="perfume-name">Hayaati Florence</span></div>
+        <div class="perfume-card"><span class="perfume-number">102</span><span class="perfume-name">Hayaati Gold Elixir</span></div>
+        <div class="perfume-card"><span class="perfume-number">103</span><span class="perfume-name">Hayaati Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">104</span><span class="perfume-name">His Confession Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">105</span><span class="perfume-name">Historic Doria Afnan</span></div>
+        <div class="perfume-card"><span class="perfume-number">106</span><span class="perfume-name">Historic Olmeda Afnan</span></div>
+        <div class="perfume-card"><span class="perfume-number">107</span><span class="perfume-name">Historic Sahara Afnan</span></div>
+        <div class="perfume-card"><span class="perfume-number">108</span><span class="perfume-name">Island Bliss Armaf Dailights</span></div>
+        <div class="perfume-card"><span class="perfume-number">109</span><span class="perfume-name">Khamrah Dukhoon</span></div>
+        <div class="perfume-card"><span class="perfume-number">110</span><span class="perfume-name">Khamrah Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">111</span><span class="perfume-name">Khamrah Qahwa Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">112</span><span class="perfume-name">King Gold Edition 3 Bharara</span></div>
+        <div class="perfume-card"><span class="perfume-number">113</span><span class="perfume-name">Liquid Brun French Avenue</span></div>
+        <div class="perfume-card"><span class="perfume-number">114</span><span class="perfume-name">Maahir Black Edition Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">115</span><span class="perfume-name">Maahir Gold Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">116</span><span class="perfume-name">Maahir Legacy Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">117</span><span class="perfume-name">Mayar Cherry Intense Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">118</span><span class="perfume-name">Mayar Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">119</span><span class="perfume-name">Mayar Natural Intense Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">120</span><span class="perfume-name">Mayar Rose Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">121</span><span class="perfume-name">Miss Armaf Attitude</span></div>
+        <div class="perfume-card"><span class="perfume-number">122</span><span class="perfume-name">Miss Armaf Chic</span></div>
+        <div class="perfume-card"><span class="perfume-number">123</span><span class="perfume-name">Miss Armaf Grandeur</span></div>
+        <div class="perfume-card"><span class="perfume-number">124</span><span class="perfume-name">Miss Armaf Mystique</span></div>
+        <div class="perfume-card"><span class="perfume-number">125</span><span class="perfume-name">Miss Armaf Magnifico</span></div>
+        <div class="perfume-card"><span class="perfume-number">126</span><span class="perfume-name">Miss Armaf Voge Viva</span></div>
+        <div class="perfume-card"><span class="perfume-number">127</span><span class="perfume-name">Musk Al Tahara Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">128</span><span class="perfume-name">Musk Noir Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">129</span><span class="perfume-name">Nebras Gold Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">130</span><span class="perfume-name">Nebras Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">131</span><span class="perfume-name">Niche Emir</span></div>
+        <div class="perfume-card"><span class="perfume-number">132</span><span class="perfume-name">Odyssey Artisto The Red Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">133</span><span class="perfume-name">Odyssey Aqua</span></div>
+        <div class="perfume-card"><span class="perfume-number">134</span><span class="perfume-name">Odyssey Ba Ha Mas</span></div>
+        <div class="perfume-card"><span class="perfume-number">135</span><span class="perfume-name">Odyssey Candyland</span></div>
+        <div class="perfume-card"><span class="perfume-number">136</span><span class="perfume-name">Odyssey Go Mango</span></div>
+        <div class="perfume-card"><span class="perfume-number">137</span><span class="perfume-name">Odyssey Homme</span></div>
+        <div class="perfume-card"><span class="perfume-number">138</span><span class="perfume-name">Odyssey Limité Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">139</span><span class="perfume-name">Odyssey Mandarin Sky</span></div>
+        <div class="perfume-card"><span class="perfume-number">140</span><span class="perfume-name">Odyssey Marshmallow</span></div>
+        <div class="perfume-card"><span class="perfume-number">141</span><span class="perfume-name">Odyssey Mega</span></div>
+        <div class="perfume-card"><span class="perfume-number">142</span><span class="perfume-name">Odyssey Revolution</span></div>
+        <div class="perfume-card"><span class="perfume-number">143</span><span class="perfume-name">Odyssey Spectra</span></div>
+        <div class="perfume-card"><span class="perfume-number">144</span><span class="perfume-name">Odyssey Toffee Coffee</span></div>
+        <div class="perfume-card"><span class="perfume-number">145</span><span class="perfume-name">Odyssey Wild One Gold Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">146</span><span class="perfume-name">Oud Al Anfar</span></div>
+        <div class="perfume-card"><span class="perfume-number">147</span><span class="perfume-name">Oud Mood Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">148</span><span class="perfume-name">Qaed Al Fursan Black Extreme</span></div>
+        <div class="perfume-card"><span class="perfume-number">149</span><span class="perfume-name">Qaed Al Fursan Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">150</span><span class="perfume-name">Qaed Al Fursan Unlimited Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">151</span><span class="perfume-name">Qaed Al Fursan Untamed</span></div>
+        <div class="perfume-card"><span class="perfume-number">152</span><span class="perfume-name">Rave Now</span></div>
+        <div class="perfume-card"><span class="perfume-number">153</span><span class="perfume-name">Rave Now Black</span></div>
+        <div class="perfume-card"><span class="perfume-number">154</span><span class="perfume-name">Rave Now Intense</span></div>
+        <div class="perfume-card"><span class="perfume-number">155</span><span class="perfume-name">Rave Now White</span></div>
+        <div class="perfume-card"><span class="perfume-number">156</span><span class="perfume-name">Rave Now Women</span></div>
+        <div class="perfume-card"><span class="perfume-number">157</span><span class="perfume-name">Sakeena Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">158</span><span class="perfume-name">Shaghaf Oud</span></div>
+        <div class="perfume-card"><span class="perfume-number">159</span><span class="perfume-name">Shaghaf Oud Tonka</span></div>
+        <div class="perfume-card"><span class="perfume-number">160</span><span class="perfume-name">Shaghaf Vanilla Toffee</span></div>
+        <div class="perfume-card"><span class="perfume-number">161</span><span class="perfume-name">Shaheen Gold Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">162</span><span class="perfume-name">Shaheen Silver Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">163</span><span class="perfume-name">Supremacy Collector's Edition Afnan</span></div>
+        <div class="perfume-card"><span class="perfume-number">164</span><span class="perfume-name">Supremacy in Heaven Afnan</span></div>
+        <div class="perfume-card"><span class="perfume-number">165</span><span class="perfume-name">Supremacy Not Only Intense Afnan</span></div>
+        <div class="perfume-card"><span class="perfume-number">166</span><span class="perfume-name">Tharwah Gold Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">167</span><span class="perfume-name">Tharwah Silver Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">168</span><span class="perfume-name">The Kingdom</span></div>
+        <div class="perfume-card"><span class="perfume-number">169</span><span class="perfume-name">Veneno French Avenue</span></div>
+        <div class="perfume-card"><span class="perfume-number">170</span><span class="perfume-name">Veneno Bianco French Avenue</span></div>
+        <div class="perfume-card"><span class="perfume-number">171</span><span class="perfume-name">Veneno Scarlet French Avenue</span></div>
+        <div class="perfume-card"><span class="perfume-number">172</span><span class="perfume-name">Vulcan French Avenue</span></div>
+        <div class="perfume-card"><span class="perfume-number">173</span><span class="perfume-name">Vulcan Baie French Avenue</span></div>
+        <div class="perfume-card"><span class="perfume-number">174</span><span class="perfume-name">Xerjoff Accento</span></div>
+        <div class="perfume-card"><span class="perfume-number">175</span><span class="perfume-name">Xerjoff Alexandria II</span></div>
+        <div class="perfume-card"><span class="perfume-number">176</span><span class="perfume-name">Xerjoff Erba Pura</span></div>
+        <div class="perfume-card"><span class="perfume-number">177</span><span class="perfume-name">Xerjoff Naxos</span></div>
+        <div class="perfume-card"><span class="perfume-number">178</span><span class="perfume-name">Xerjoff Soprano</span></div>
+        <div class="perfume-card"><span class="perfume-number">179</span><span class="perfume-name">Xerjoff Torino21</span></div>
+        <div class="perfume-card"><span class="perfume-number">180</span><span class="perfume-name">Yara Candy Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">181</span><span class="perfume-name">Yara Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">182</span><span class="perfume-name">Yara Moi Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">183</span><span class="perfume-name">Yara Special Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">184</span><span class="perfume-name">Yara Tous Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">185</span><span class="perfume-name">Yum Yum Armaf Dailights</span></div>
+        <div class="perfume-card"><span class="perfume-number">186</span><span class="perfume-name">Yum Yum Give Me Gourmand</span></div>
+        <div class="perfume-card"><span class="perfume-number">187</span><span class="perfume-name">Lattafa Eclaire</span></div>
+        <div class="perfume-card"><span class="perfume-number">188</span><span class="perfume-name">Lattafa Eclaire Banoffee</span></div>
+        <div class="perfume-card"><span class="perfume-number">189</span><span class="perfume-name">Lattafa Eclaire Pistache</span></div>
+        <div class="perfume-card"><span class="perfume-number">190</span><span class="perfume-name">Afnan 9 AM Pink Live</span></div>
+        <div class="perfume-card"><span class="perfume-number">191</span><span class="perfume-name">Afnan Historic Olmeda</span></div>
+        <div class="perfume-card"><span class="perfume-number">192</span><span class="perfume-name">Afnan Historic Sahara</span></div>
+        <div class="perfume-card"><span class="perfume-number">193</span><span class="perfume-name">Al Haramain L'Aventure Blanche</span></div>
+        <div class="perfume-card"><span class="perfume-number">194</span><span class="perfume-name">Armaf Club de Nuit Iconic</span></div>
+        <div class="perfume-card"><span class="perfume-number">195</span><span class="perfume-name">Armaf Club de Nuit Milestone</span></div>
+        <div class="perfume-card"><span class="perfume-number">196</span><span class="perfume-name">Armaf Club de Nuit Private Key To My Life</span></div>
+        <div class="perfume-card"><span class="perfume-number">197</span><span class="perfume-name">Armaf Club de Nuit Private Key To My Paris</span></div>
+        <div class="perfume-card"><span class="perfume-number">198</span><span class="perfume-name">Armaf Club de Nuit Private Key To My Soul</span></div>
+        <div class="perfume-card"><span class="perfume-number">199</span><span class="perfume-name">Armaf Club de Nuit Untold</span></div>
+        <div class="perfume-card"><span class="perfume-number">200</span><span class="perfume-name">Armaf Club de Nuit Urban Man Elixir</span></div>
+        <div class="perfume-card"><span class="perfume-number">201</span><span class="perfume-name">Armaf Dailights Sunset Glow</span></div>
+        <div class="perfume-card"><span class="perfume-number">202</span><span class="perfume-name">Armaf Italiano Donna</span></div>
+        <div class="perfume-card"><span class="perfume-number">203</span><span class="perfume-name">Armaf Italiano Nero</span></div>
+        <div class="perfume-card"><span class="perfume-number">204</span><span class="perfume-name">Armaf Radical Blue</span></div>
+        <div class="perfume-card"><span class="perfume-number">205</span><span class="perfume-name">Armaf Radical Brown</span></div>
+        <div class="perfume-card"><span class="perfume-number">206</span><span class="perfume-name">Asad Lattafa Gold Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">207</span><span class="perfume-name">Bade'e Al Oud Noble Blush</span></div>
+        <div class="perfume-card"><span class="perfume-number">208</span><span class="perfume-name">Bade'e Al Oud Sublime</span></div>
+        <div class="perfume-card"><span class="perfume-number">209</span><span class="perfume-name">Bharara King Platinum</span></div>
+        <div class="perfume-card"><span class="perfume-number">210</span><span class="perfume-name">Bharara Viking Soul</span></div>
+        <div class="perfume-card"><span class="perfume-number">211</span><span class="perfume-name">Fakhar Lattafa Extrait</span></div>
+        <div class="perfume-card"><span class="perfume-number">212</span><span class="perfume-name">Hayaati Al Malaky</span></div>
+        <div class="perfume-card"><span class="perfume-number">213</span><span class="perfume-name">Khamrah Dukhoon</span></div>
+        <div class="perfume-card"><span class="perfume-number">214</span><span class="perfume-name">Maahir Legacy Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">215</span><span class="perfume-name">Mayar Rose Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">216</span><span class="perfume-name">Musk Al Tahara Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">217</span><span class="perfume-name">Nebras Gold Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">218</span><span class="perfume-name">Odyssey Limité Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">219</span><span class="perfume-name">Qaed Al Fursan Black Extreme</span></div>
+        <div class="perfume-card"><span class="perfume-number">220</span><span class="perfume-name">Rave Now Black</span></div>
+        <div class="perfume-card"><span class="perfume-number">221</span><span class="perfume-name">Shaheen Gold Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">222</span><span class="perfume-name">Xerjoff Alexandria II</span></div>
+        <div class="perfume-card"><span class="perfume-number">223</span><span class="perfume-name">Xerjoff Naxos</span></div>
+        <div class="perfume-card"><span class="perfume-number">224</span><span class="perfume-name">Xerjoff Torino21</span></div>
+        <div class="perfume-card"><span class="perfume-number">225</span><span class="perfume-name">Yara Candy Lattafa</span></div>
+        <div class="perfume-card"><span class="perfume-number">226</span><span class="perfume-name">Yara Special Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">227</span><span class="perfume-name">Give Me Gourmand Vanilla Crush</span></div>
+        <div class="perfume-card"><span class="perfume-number">228</span><span class="perfume-name">Swiss Arabian Shaghaf Oud</span></div>
+        <div class="perfume-card"><span class="perfume-number">229</span><span class="perfume-name">Swiss Arabian Shaghaf Oud Tonka</span></div>
+        <div class="perfume-card"><span class="perfume-number">230</span><span class="perfume-name">Swiss Arabian Shaghaf Vanilla Toffee</span></div>
+        <div class="perfume-card"><span class="perfume-number">231</span><span class="perfume-name">Lattafa Pride Tharwah Gold</span></div>
+        <div class="perfume-card"><span class="perfume-number">232</span><span class="perfume-name">Lattafa Pride Tharwah Silver</span></div>
+        <div class="perfume-card"><span class="perfume-number">233</span><span class="perfume-name">Afnan Supremacy in Heaven</span></div>
+        <div class="perfume-card"><span class="perfume-number">234</span><span class="perfume-name">Afnan Supremacy Not Only Intense</span></div>
+        <div class="perfume-card"><span class="perfume-number">235</span><span class="perfume-name">Afnan Supremacy Collector's Edition</span></div>
+        <div class="perfume-card"><span class="perfume-number">236</span><span class="perfume-name">French Avenue Aether Extrait</span></div>
+        <div class="perfume-card"><span class="perfume-number">237</span><span class="perfume-name">French Avenue Bouquet of Euphoria</span></div>
+        <div class="perfume-card"><span class="perfume-number">238</span><span class="perfume-name">French Avenue Forbidden Fruit</span></div>
+        <div class="perfume-card"><span class="perfume-number">239</span><span class="perfume-name">French Avenue Irida Extrait</span></div>
+        <div class="perfume-card"><span class="perfume-number">240</span><span class="perfume-name">French Avenue Sun Kissed</span></div>
+        <div class="perfume-card"><span class="perfume-number">241</span><span class="perfume-name">French Avenue Teas Me</span></div>
+        <div class="perfume-card"><span class="perfume-number">242</span><span class="perfume-name">French Avenue Luscious</span></div>
+        <div class="perfume-card"><span class="perfume-number">243</span><span class="perfume-name">Xerjoff Velvet Embrace (X Iscents)</span></div>
+        <div class="perfume-card"><span class="perfume-number">244</span><span class="perfume-name">Xerjoff Accord (X Iscents Yellow Box)</span></div>
+        <div class="perfume-card"><span class="perfume-number">245</span><span class="perfume-name">Xerjoff Blue (X Iscents Blue Box)</span></div>
+    </div>
 
     <script>
-        const WHATSAPP_NUMBER = "5493364206725";
+        function filterPerfumes() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('perfumeGrid');
+            const cards = grid.getElementsByClassName('perfume-card');
 
-        const productos = [
-            { id: "1XH7-IvNhREJ4fp5Rv95SHkRdPRFOcpTo", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1ZLVHNLEqeCRG0i5muf8VbUXMaRKeIcnj", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "16cogpQEfBaF0lHKVCkpOWMhU9G0yp40K", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1Fqw1q2BnzFHjxBbJDioHhuoJYSvpbOoq", marca: "Le Labo", nombre: "Fragancia Exclusiva Importada", color: "plata" },
-            { id: "1RXBqnPScYlcRqQqPBW4-luZXwqjmITZ3", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "negro" },
-            { id: "1PAJm27I9qM4lcHx6oVwkY8cMV3gAmSP3", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1zUf4lSEiKLA8zCpbWBXd-gybnVOFL9mC", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1dXTJ6Wnaj5QH13JT7ro1daU6TNSKWs_1", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "plata" },
-            { id: "1ohSjWAH-NyGAZG1O9gDA-LSj9nuTnCmH", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1fGXlB3KbfUqlNgGkRzqmj6ybDmRVtwnR", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1Ye-269Cgnq7YHMdoP56hgTvbinPBv1jy", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1X1LmHCOz00bq9kJcj4Pmr8dwCbwZwB9B", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "140PuhMxhi6bDdw_MMtrVEjPQTqRi6p7-", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "10qtaxJ3hulQxBsBa-M2nYbkW7Q1GhZTl", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1y-EK4JKhBWcJ7d4tS4BnqKq5q5CR84uo", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1A-BSwfntvoQ3n6U0aZlNbKGguc7GctcE", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "16GEbIXpg_erlx1gnTqzJKKDH71ux4uYG", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1PdGGjlWtjWSrYyZEgfV9gQJVWkSG8XvN", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1ur9LATG-6IM1qCa5NYb1h1nwtrU7NLAR", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "18xf-tcNEwYzb_QilopB9WNCeL6lHJxRL", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "19BhjOsr48y5s_2jeWNm7VcheuyUyZnvx", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1Bje1J1gb1osCtpjLykxbpvm8fQEndyG2", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1D-S5rj9GXZMqeXW5zEYBTqnyakbM-EbR", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "10KnnemsVEJBf655316YxFqr-yQukFRhw", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1e3sRtYsQesMC70jsp9afrihOifcHbAob", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1FrtzSK9wRq1oXOxWrS7vgQDAL6Bj3EcY", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1nKDMNB_3JllH9IgyXvEC6jVp6qDTRI5B", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "19Rz4Hd83FLxlEBImT6zTyl8Sj2B0WQhl", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1b9-O4tc7hLsFOaJvS1r1EWF9N8T4USvd", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1bnKrs0otJ8AYTRqeAdwBZ5ERcnVORFUB", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1Svr6DCYuWX9vLRQHK2PgjdyBsYcYQ57j", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1vq_tiXWzyeI9ixtinuF9LpyMg_LBFJN6", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1UkRJYHTqt001aNgic3ARHOtnSiZqOn4g", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1ztf5NcN6tm1ea4K50Wm7YdgSmwxgYvv-", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1ROt-IciUsQkkQQQVCzxf1vpjCM-Phc7w", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1bjFSiLw7l_OplEd3rg_MLA4KDtW2eNUM", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1jPAU8pDPWJNwolo0n2eqx56OdEAU11ee", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1t2trIa__088uwwi1hauZxCtbbx7CVoHP", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "11SXLDRrn9HQgxKPwWsQrYhyCcI7zQ_BT", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "17ih_IcIil5ahDD-YXFevgKatkvbS5qO0", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1YG14YOIsiMJMezou1_kq9kBz_L9IXTjm", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1gIGziC1bz-ZWpSoi8AvV4rMDEe72GvmW", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1ZO2O7h6SLE2BNN3IXYo0Zh6sD_Usal9S", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1uQtvULia3Afz-IWqmnTIrZb9m3PDw4WP", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1tgvSdUVV84RI0LUmZ-uN_82Zr-n513rp", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1MF9f-HzQsRev8M0HvVmmNzOJy1dGxnP2", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1Dmh73mPH4k1QbTo_CM_bhjZVAYrtf788", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1WHOHvz3ebZVmMrz3muJ46mQHv2t_4n_K", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1mZHaDbqOsMJbU6PSY0AyE2WhwtLpjr6p", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1ZSu6hgbHWDE4h4Ke_3ULnsk83plk4PSm", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1pP_vikLqiJOMwxxoTohPcFpAjqP0WENj", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "14Xq-b8NkT_tZQXG9sUX9hAsOnTdnzJw9", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1dhykyt_wixsAF849Aq8DIw4_RIA4tId0", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1O2zCa3HMjPPVLWD2zXrDsqfmNap1IqGF", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1dLrK6kBYXa4yac7GGHwDP2OxAokrYdDz", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "11zWld6tc-Xx025VFLADe8z2vkzw5UTzG", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1HhiWfTRBAl_tZhFxO2WNfwWpgfalexbr", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1wfYITvFN9jbAK8Xlnpp7iR3DIsUlycba", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1TR0rNPo6erk0fZJe4srIEjYRaImMj0L1", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1Y0RYUko829krq_l0BNLojK29SbVAsudp", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1Txw7RpzJPMyQwEKHwusXVqchZc1V85N1", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1CZ7skepI-iF5Y26RfaEN0YDQCTsQtHzL", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1DoF5ag7MjaHykjuyt9VX3wcOV7PT9vdM", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1aTqX4GYJt6ZS8Dzd1Dj9udYMQ7xbTmep", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1MiVIqvSZJE0HKgIc0brhGpKdbBpn7A3m", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1OEia9CjjMtmMnYgzs9SesX5s7QFaps5-", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1Q2dnr99CiHtodOmQn5Z6Seff2M1LMmus", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1ju-TvcbV14vJzHbEmAG7IavhU9uAyPPc", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1c0UgwHr6_Z6LfLn8b_bpymjGDd5ibZbc", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1e7lQzYlkPvHY80qT7-hrspmm1ywyvbY_", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1cxlxy05_YDsuO7INJMQNpkqvw6zT9tJl", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1oY4zBgqSGWADuW-kchwzMNKjEgepxBd8", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1GTmiiogZ0F1IzOFIpCfIfuyIKRNCoI-G", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1uX_yv6q6MUEp6vKpAIL5i726rDwb2gtN", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1fWZ4zFgpMf-Jk_oMGMTW-0bNf8_jDn-B", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1_sCs1j2M5mj0fKHJsJfq5-tPpAdZHC_Y", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1gyW5fecbidBYSVMpLonEt5RjCF2O2wMi", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1zUabqLHMyU2MvXJH-BStrO14oAJ12IhX", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1u9yO-dPLgRKcUIOqi_zillwJ5PhANs3R", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1g0JJ8WB-RapYVH_Y16i4y2FMVvB1-td7", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1WGvLUGXIGU_ArCXLs8UuyJ0qmM3WxS4m", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1cX_kVTmNZX6xp_5bVKiQiZgmUZnwRyjk", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1NR6ixEPwgivrR8Q_ilSVyILFsUEbreZP", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1vJcU9yS1qCrC3FKoG5m3B86_g52QzxsG", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" }
-        ];
-
-        let selectedCart = [];
-        let activeColorFilter = 'todos';
-
-        function filterColor(color) {
-            activeColorFilter = color;
-            document.querySelectorAll('.chip').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            render();
-        }
-
-        function toggleCart(id) {
-            const index = selectedCart.indexOf(id);
-            if (index === -1) {
-                selectedCart.push(id);
-            } else {
-                selectedCart.splice(index, 1);
-            }
-            updateCartBar();
-            render();
-        }
-
-        function updateCartBar() {
-            const bar = document.getElementById('cartBar');
-            const count = document.getElementById('cartCount');
-            if (selectedCart.length > 0) {
-                bar.style.display = 'flex';
-                count.innerText = selectedCart.length;
-            } else {
-                bar.style.display = 'none';
+            for (let i = 0; i < cards.length; i++) {
+                const nameSpan = cards[i].getElementsByClassName('perfume-name')[0];
+                const textValue = nameSpan.textContent || nameSpan.innerText;
+                if (textValue.toLowerCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
             }
         }
-
-        function sendWhatsApp() {
-            if (selectedCart.length === 0) return;
-
-            let mensaje = "¡Hola! Quisiera encargar los siguientes perfumes:\n\n";
-            selectedCart.forEach((id, index) => {
-                const prod = productos.find(p => p.id === id);
-                mensaje += `${index + 1}. *${prod.marca}* - ${prod.nombre}\n`;
-            });
-
-            mensaje += "\nPor favor, pásame el total e información de CBU/Alias para realizar la transferencia.";
-
-            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
-            window.open(url, '_blank');
-        }
-
-        function render() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const selectedBrand = document.getElementById('brandSelect').value;
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = "";
-
-            const filtered = productos.filter(p => {
-                const matchesSearch = p.marca.toLowerCase().includes(search) || p.nombre.toLowerCase().includes(search);
-                const matchesBrand = selectedBrand === 'todas' || p.marca === selectedBrand;
-                const matchesColor = activeColorFilter === 'todos' || p.color === activeColorFilter;
-                return matchesSearch && matchesBrand && matchesColor;
-            });
-
-            filtered.forEach(p => {
-                const imgUrl = `https://lh3.googleusercontent.com/d/${p.id}`;
-                const isSelected = selectedCart.includes(p.id);
-
-                grid.innerHTML += `
-                    <div class="card">
-                        <img src="${imgUrl}" alt="${p.marca}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Perfume'">
-                        <div class="card-body">
-                            <span class="card-brand">${p.marca}</span>
-                            <div class="card-title">${p.nombre}</div>
-                            <button class="btn-add ${isSelected ? 'added' : ''}" onclick="toggleCart('${p.id}')">
-                                ${isSelected ? '✓ En el encargo' : '+ Añadir al encargo'}
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        render();
     </script>
+
 </body>
 </html>
