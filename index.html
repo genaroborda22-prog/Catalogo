@@ -3,288 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Perfumes Importados</title>
+    <title>Catálogo de Perfumes Importados y Árabes</title>
     <style>
-        :root {
-            --primary: #0f172a;
-            --accent: #25d366;
-            --accent-dark: #1da851;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); padding-bottom: 90px; }
-        
-        header { background: var(--primary); color: white; text-align: center; padding: 30px 15px; }
-        header h1 { font-size: 26px; margin-bottom: 8px; font-weight: 700; }
-        header p { font-size: 14px; opacity: 0.85; }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
-
-        /* Controles y Filtros */
-        .controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
-        .filter-row { display: flex; gap: 10px; flex-wrap: wrap; }
-        .search-box { flex: 1; min-width: 200px; }
-        .search-box input, .brand-select select { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; outline: none; background: white; transition: border 0.2s; }
-        .search-box input:focus, .brand-select select:focus { border-color: var(--primary); }
-        .brand-select { min-width: 180px; }
-
-        .color-filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
-        .color-filters::-webkit-scrollbar { display: none; }
-        .chip { background: #e2e8f0; border: none; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; color: #475569; transition: all 0.2s; }
-        .chip.active { background: var(--primary); color: white; }
-
-        /* Grilla de productos */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        @media (min-width: 640px) { .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; } }
-
-        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; flex-direction: column; transition: transform 0.2s; border: 1px solid #f1f5f9; }
-        .card:hover { transform: translateY(-2px); }
-        .card img { width: 100%; height: 180px; object-fit: cover; background: #f1f5f9; }
-        @media (min-width: 640px) { .card img { height: 230px; } }
-
-        .card-body { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
-        .card-brand { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.5px; }
-        .card-title { font-size: 14px; font-weight: 600; margin: 4px 0 12px; color: var(--text); line-height: 1.3; }
-        
-        .btn-add { margin-top: auto; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .btn-add:hover { background: #334155; }
-        .btn-add.added { background: #16a34a; }
-
-        /* Info extra / FAQ */
-        .info-section { margin-top: 40px; background: white; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; }
-        .info-section h3 { font-size: 16px; margin-bottom: 10px; color: var(--primary); }
-        .info-section p { font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 8px; }
-
-        /* Carrito flotante de WhatsApp */
-        .cart-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; width: calc(100% - 30px); max-width: 500px; padding: 14px 20px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4); cursor: pointer; text-decoration: none; font-weight: 700; font-size: 15px; z-index: 100; transition: transform 0.2s; }
-        .cart-bar:hover { background: var(--accent-dark); transform: translateX(-50%) scale(1.02); }
-        .cart-count { background: white; color: var(--accent); padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 800; }
+        body { font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333; margin: 0; padding: 20px; }
+        h1 { text-align: center; color: #111; margin-bottom: 30px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 15px; display: flex; flex-direction: column; justify-content: space-between; }
+        .card h3 { font-size: 16px; margin: 10px 0; color: #222; }
+        .price { font-size: 18px; font-weight: bold; color: #2b7a78; margin-bottom: 15px; }
+        .btn-wa { background-color: #25d366; color: white; text-decoration: none; text-align: center; padding: 10px; border-radius: 5px; font-weight: bold; transition: background 0.3s; }
+        .btn-wa:hover { background-color: #1ebe5d; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Catálogo de Perfumes</h1>
-        <p>Seleccioná tus fragancias y encargalas directamente por WhatsApp</p>
-    </header>
-
-    <div class="container">
-        <div class="controls">
-            <div class="filter-row">
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Buscar por palabra..." oninput="render()">
-                </div>
-                <div class="brand-select">
-                    <select id="brandSelect" onchange="render()">
-                        <option value="todas">Todas las marcas</option>
-                        <option value="Lattafa">Lattafa</option>
-                        <option value="Armaf">Armaf</option>
-                        <option value="Al Haramain">Al Haramain</option>
-                        <option value="Maison Alhambra">Maison Alhambra</option>
-                        <option value="Le Labo">Le Labo</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="color-filters" id="colorFilters">
-                <button class="chip active" onclick="filterColor('todos')">Todos</button>
-                <button class="chip" onclick="filterColor('dorado')">✨ Dorado / Oro</button>
-                <button class="chip" onclick="filterColor('negro')">🖤 Negro / Oscuro</button>
-                <button class="chip" onclick="filterColor('azul')">💙 Azul / Celeste</button>
-                <button class="chip" onclick="filterColor('plata')">🤍 Plata / Transparente</button>
-                <button class="chip" onclick="filterColor('rojo')">❤️ Rojo / Rosa</button>
-                <button class="chip" onclick="filterColor('verde')">💚 Verde / Marrón</button>
-            </div>
+    <h1>Catálogo de Perfumes</h1>
+    
+    <div class="grid">
+        <!-- Producto 1 -->
+        <div class="card">
+            <h3>Lattafa Afeef 100ml</h3>
+            <div class="price">$64.00</div>
+            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Afeef%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
         </div>
 
-        <div class="grid" id="productGrid"></div>
+        <!-- Producto 2 -->
+        <div class="card">
+            <h3>Lattafa Asad Men 100ml</h3>
+            <div class="price">$30.00</div>
+            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Asad%20Men%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        </div>
 
-        <div class="info-section">
-            <h3>💳 ¿Cómo realizás tu encargo?</h3>
-            <p>1. Añadí todos los perfumes que quieras al carrito.</p>
-            <p>2. Tocá el botón verde para enviarnos la lista por WhatsApp.</p>
-            <p>3. Te responderemos con la confirmación de stock, importe total y el CBU/Alias para que realices la transferencia.</p>
+        <!-- Producto 3 -->
+        <div class="card">
+            <h3>Lattafa Ajwaa Pride 90ml</h3>
+            <div class="price">$32.00</div>
+            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Ajwaa%20Pride%2090ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        </div>
+
+        <!-- Producto 4 -->
+        <div class="card">
+            <h3>Lattafa Asad Zanzibar 100ml (Blue)</h3>
+            <div class="price">$26.00</div>
+            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Asad%20Zanzibar%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        </div>
+
+        <!-- Producto 5 -->
+        <div class="card">
+            <h3>Lattafa Ajwad Pink To Pink 60ml</h3>
+            <div class="price">$28.00](https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Ajwad%20Pink%20To%20Pink%2060ml)
+            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Ajwad%20Pink%20To%20Pink%2060ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        </div>
+
+        <!-- Producto 6 -->
+        <div class="card">
+            <h3>Lattafa Asad Bourbon 100ml</h3>
+            <div class="price">$34.00</div>
+            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Asad%20Bourbon%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        </div>
+
+        <!-- Producto 7 -->
+        <div class="card">
+            <h3>Lattafa Al Noble Ameer EDP 100ml</h3>
+            <div class="price">$32.00</div>
+            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Al%20Noble%20Ameer%20EDP%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        </div>
+
+        <!-- Producto 8 -->
+        <div class="card">
+            <h3>Lattafa Badee Al Oud Amethyst EDP 100ml</h3>
+            <div class="price">$27.00</div>
+            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Badee%20Al%20Oud%20Amethyst%20EDP%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        </div>
+
+        <!-- Producto 9 -->
+        <div class="card">
+            <h3>Lattafa Al Noble Wazeer EDP 100ml</h3>
+            <div class="price">$32.00</div>
+            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Al%20Noble%20Wazeer%20EDP%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        </div>
+
+        <!-- Producto 10 -->
+        <div class="card">
+            <h3>Lattafa Badee Al Oud Glory Black 100ml</h3>
+            <div class="price">$27.00</div>
+            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Badee%20Al%20Oud%20Glory%20Black%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
         </div>
     </div>
 
-    <!-- Botón Flotante -->
-    <a id="cartBar" class="cart-bar" style="display:none;" onclick="sendWhatsApp()">
-        <span>🛒 Enviar Encargo por WhatsApp</span>
-        <span class="cart-count" id="cartCount">0</span>
-    </a>
-
-    <script>
-        const WHATSAPP_NUMBER = "5493364206725";
-
-        const productos = [
-            { id: "1XH7-IvNhREJ4fp5Rv95SHkRdPRFOcpTo", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1ZLVHNLEqeCRG0i5muf8VbUXMaRKeIcnj", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "16cogpQEfBaF0lHKVCkpOWMhU9G0yp40K", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1Fqw1q2BnzFHjxBbJDioHhuoJYSvpbOoq", marca: "Le Labo", nombre: "Fragancia Exclusiva Importada", color: "plata" },
-            { id: "1RXBqnPScYlcRqQqPBW4-luZXwqjmITZ3", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "negro" },
-            { id: "1PAJm27I9qM4lcHx6oVwkY8cMV3gAmSP3", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1zUf4lSEiKLA8zCpbWBXd-gybnVOFL9mC", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1dXTJ6Wnaj5QH13JT7ro1daU6TNSKWs_1", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "plata" },
-            { id: "1ohSjWAH-NyGAZG1O9gDA-LSj9nuTnCmH", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1fGXlB3KbfUqlNgGkRzqmj6ybDmRVtwnR", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1Ye-269Cgnq7YHMdoP56hgTvbinPBv1jy", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1X1LmHCOz00bq9kJcj4Pmr8dwCbwZwB9B", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "140PuhMxhi6bDdw_MMtrVEjPQTqRi6p7-", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "10qtaxJ3hulQxBsBa-M2nYbkW7Q1GhZTl", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1y-EK4JKhBWcJ7d4tS4BnqKq5q5CR84uo", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1A-BSwfntvoQ3n6U0aZlNbKGguc7GctcE", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "16GEbIXpg_erlx1gnTqzJKKDH71ux4uYG", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1PdGGjlWtjWSrYyZEgfV9gQJVWkSG8XvN", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1ur9LATG-6IM1qCa5NYb1h1nwtrU7NLAR", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "18xf-tcNEwYzb_QilopB9WNCeL6lHJxRL", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "19BhjOsr48y5s_2jeWNm7VcheuyUyZnvx", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1Bje1J1gb1osCtpjLykxbpvm8fQEndyG2", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1D-S5rj9GXZMqeXW5zEYBTqnyakbM-EbR", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "10KnnemsVEJBf655316YxFqr-yQukFRhw", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1e3sRtYsQesMC70jsp9afrihOifcHbAob", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1FrtzSK9wRq1oXOxWrS7vgQDAL6Bj3EcY", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1nKDMNB_3JllH9IgyXvEC6jVp6qDTRI5B", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "19Rz4Hd83FLxlEBImT6zTyl8Sj2B0WQhl", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1b9-O4tc7hLsFOaJvS1r1EWF9N8T4USvd", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1bnKrs0otJ8AYTRqeAdwBZ5ERcnVORFUB", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1Svr6DCYuWX9vLRQHK2PgjdyBsYcYQ57j", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1vq_tiXWzyeI9ixtinuF9LpyMg_LBFJN6", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1UkRJYHTqt001aNgic3ARHOtnSiZqOn4g", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1ztf5NcN6tm1ea4K50Wm7YdgSmwxgYvv-", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1ROt-IciUsQkkQQQVCzxf1vpjCM-Phc7w", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1bjFSiLw7l_OplEd3rg_MLA4KDtW2eNUM", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1jPAU8pDPWJNwolo0n2eqx56OdEAU11ee", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1t2trIa__088uwwi1hauZxCtbbx7CVoHP", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "11SXLDRrn9HQgxKPwWsQrYhyCcI7zQ_BT", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "17ih_IcIil5ahDD-YXFevgKatkvbS5qO0", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1YG14YOIsiMJMezou1_kq9kBz_L9IXTjm", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1gIGziC1bz-ZWpSoi8AvV4rMDEe72GvmW", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1ZO2O7h6SLE2BNN3IXYo0Zh6sD_Usal9S", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1uQtvULia3Afz-IWqmnTIrZb9m3PDw4WP", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1tgvSdUVV84RI0LUmZ-uN_82Zr-n513rp", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1MF9f-HzQsRev8M0HvVmmNzOJy1dGxnP2", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1Dmh73mPH4k1QbTo_CM_bhjZVAYrtf788", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1WHOHvz3ebZVmMrz3muJ46mQHv2t_4n_K", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1mZHaDbqOsMJbU6PSY0AyE2WhwtLpjr6p", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1ZSu6hgbHWDE4h4Ke_3ULnsk83plk4PSm", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1pP_vikLqiJOMwxxoTohPcFpAjqP0WENj", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "14Xq-b8NkT_tZQXG9sUX9hAsOnTdnzJw9", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1dhykyt_wixsAF849Aq8DIw4_RIA4tId0", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1O2zCa3HMjPPVLWD2zXrDsqfmNap1IqGF", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1dLrK6kBYXa4yac7GGHwDP2OxAokrYdDz", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "11zWld6tc-Xx025VFLADe8z2vkzw5UTzG", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1HhiWfTRBAl_tZhFxO2WNfwWpgfalexbr", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1wfYITvFN9jbAK8Xlnpp7iR3DIsUlycba", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1TR0rNPo6erk0fZJe4srIEjYRaImMj0L1", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1Y0RYUko829krq_l0BNLojK29SbVAsudp", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1Txw7RpzJPMyQwEKHwusXVqchZc1V85N1", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1CZ7skepI-iF5Y26RfaEN0YDQCTsQtHzL", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1DoF5ag7MjaHykjuyt9VX3wcOV7PT9vdM", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1aTqX4GYJt6ZS8Dzd1Dj9udYMQ7xbTmep", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1MiVIqvSZJE0HKgIc0brhGpKdbBpn7A3m", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1OEia9CjjMtmMnYgzs9SesX5s7QFaps5-", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1Q2dnr99CiHtodOmQn5Z6Seff2M1LMmus", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1ju-TvcbV14vJzHbEmAG7IavhU9uAyPPc", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1c0UgwHr6_Z6LfLn8b_bpymjGDd5ibZbc", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1e7lQzYlkPvHY80qT7-hrspmm1ywyvbY_", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1cxlxy05_YDsuO7INJMQNpkqvw6zT9tJl", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1oY4zBgqSGWADuW-kchwzMNKjEgepxBd8", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1GTmiiogZ0F1IzOFIpCfIfuyIKRNCoI-G", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1uX_yv6q6MUEp6vKpAIL5i726rDwb2gtN", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1fWZ4zFgpMf-Jk_oMGMTW-0bNf8_jDn-B", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1_sCs1j2M5mj0fKHJsJfq5-tPpAdZHC_Y", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1gyW5fecbidBYSVMpLonEt5RjCF2O2wMi", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1zUabqLHMyU2MvXJH-BStrO14oAJ12IhX", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" },
-            { id: "1u9yO-dPLgRKcUIOqi_zillwJ5PhANs3R", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "dorado" },
-            { id: "1g0JJ8WB-RapYVH_Y16i4y2FMVvB1-td7", marca: "Maison Alhambra", nombre: "Fragancia Exclusiva Importada", color: "negro" },
-            { id: "1WGvLUGXIGU_ArCXLs8UuyJ0qmM3WxS4m", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "plata" },
-            { id: "1cX_kVTmNZX6xp_5bVKiQiZgmUZnwRyjk", marca: "Armaf", nombre: "Fragancia Exclusiva Importada", color: "rojo" },
-            { id: "1NR6ixEPwgivrR8Q_ilSVyILFsUEbreZP", marca: "Lattafa", nombre: "Perfume Importado Árabe", color: "verde" },
-            { id: "1vJcU9yS1qCrC3FKoG5m3B86_g52QzxsG", marca: "Al Haramain", nombre: "Fragancia Exclusiva Importada", color: "azul" }
-        ];
-
-        let selectedCart = [];
-        let activeColorFilter = 'todos';
-
-        function filterColor(color) {
-            activeColorFilter = color;
-            document.querySelectorAll('.chip').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            render();
-        }
-
-        function toggleCart(id) {
-            const index = selectedCart.indexOf(id);
-            if (index === -1) {
-                selectedCart.push(id);
-            } else {
-                selectedCart.splice(index, 1);
-            }
-            updateCartBar();
-            render();
-        }
-
-        function updateCartBar() {
-            const bar = document.getElementById('cartBar');
-            const count = document.getElementById('cartCount');
-            if (selectedCart.length > 0) {
-                bar.style.display = 'flex';
-                count.innerText = selectedCart.length;
-            } else {
-                bar.style.display = 'none';
-            }
-        }
-
-        function sendWhatsApp() {
-            if (selectedCart.length === 0) return;
-
-            let mensaje = "¡Hola! Quisiera encargar los siguientes perfumes:\n\n";
-            selectedCart.forEach((id, index) => {
-                const prod = productos.find(p => p.id === id);
-                mensaje += `${index + 1}. *${prod.marca}* - ${prod.nombre}\n`;
-            });
-
-            mensaje += "\nPor favor, pásame el total e información de CBU/Alias para realizar la transferencia.";
-
-            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
-            window.open(url, '_blank');
-        }
-
-        function render() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const selectedBrand = document.getElementById('brandSelect').value;
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = "";
-
-            const filtered = productos.filter(p => {
-                const matchesSearch = p.marca.toLowerCase().includes(search) || p.nombre.toLowerCase().includes(search);
-                const matchesBrand = selectedBrand === 'todas' || p.marca === selectedBrand;
-                const matchesColor = activeColorFilter === 'todos' || p.color === activeColorFilter;
-                return matchesSearch && matchesBrand && matchesColor;
-            });
-
-            filtered.forEach(p => {
-                const imgUrl = `https://lh3.googleusercontent.com/d/${p.id}`;
-                const isSelected = selectedCart.includes(p.id);
-
-                grid.innerHTML += `
-                    <div class="card">
-                        <img src="${imgUrl}" alt="${p.marca}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Perfume'">
-                        <div class="card-body">
-                            <span class="card-brand">${p.marca}</span>
-                            <div class="card-title">${p.nombre}</div>
-                            <button class="btn-add ${isSelected ? 'added' : ''}" onclick="toggleCart('${p.id}')">
-                                ${isSelected ? '✓ En el encargo' : '+ Añadir al encargo'}
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        render();
-    </script>
 </body>
 </html>
