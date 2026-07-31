@@ -3,151 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Perfumes por Encargo</title>
+    <title>Catálogo de Perfumes Importados</title>
     <style>
         :root {
-            --primary: #111;
-            --accent: #25D366;
-            --bg: #f8f9fa;
+            --primary: #0f172a;
+            --accent: #25d366;
+            --accent-dark: #1da851;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; padding: 20px; color: #333; }
-        header { text-align: center; margin-bottom: 30px; }
-        h1 { margin-bottom: 5px; }
-        p { color: #666; }
-
-        /* Panel de Filtros */
-        .filter-panel { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: center; margin-bottom: 25px; }
-        select, input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; outline: none; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); padding-bottom: 90px; }
         
-        /* Grid de Productos */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; flex-direction: column; transition: transform 0.2s; }
-        .card:hover { transform: translateY(-3px); }
-        .card img { width: 100%; height: 220px; object-fit: cover; background: #eee; }
-        .card-content { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; }
-        .card-title { font-weight: bold; font-size: 16px; margin-bottom: 8px; }
-        .badges { display: flex; gap: 5px; margin-bottom: 12px; flex-wrap: wrap; }
-        .badge { font-size: 11px; padding: 3px 8px; border-radius: 12px; background: #eee; color: #555; }
-        .badge-color { background: #f0f0f0; border: 1px solid #ddd; }
-        .btn-ws { margin-top: auto; background: var(--accent); color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; text-decoration: none; text-align: center; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-ws:hover { background: #1eb857; }
+        header { background: var(--primary); color: white; text-align: center; padding: 30px 15px; }
+        header h1 { font-size: 26px; margin-bottom: 8px; font-weight: 700; }
+        header p { font-size: 14px; opacity: 0.85; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
+
+        /* Controles y Filtros */
+        .controls { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
+        .search-box { width: 100%; }
+        .search-box input { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; outline: none; transition: border 0.2s; }
+        .search-box input:focus { border-color: var(--primary); }
+
+        .color-filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .color-filters::-webkit-scrollbar { display: none; }
+        .chip { background: #e2e8f0; border: none; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; whitespace: nowrap; color: #475569; transition: all 0.2s; }
+        .chip.active { background: var(--primary); color: white; }
+
+        /* Grilla de productos */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        @media (min-width: 640px) { .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; } }
+
+        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; flex-direction: column; transition: transform 0.2s; border: 1px solid #f1f5f9; }
+        .card:hover { transform: translateY(-2px); }
+        .card img { width: 100%; height: 180px; object-fit: cover; background: #f1f5f9; }
+        @media (min-width: 640px) { .card img { height: 230px; } }
+
+        .card-body { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
+        .card-brand { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.5px; }
+        .card-title { font-size: 14px; font-weight: 600; margin: 4px 0 12px; color: var(--text); line-height: 1.3; }
+        
+        .btn-add { margin-top: auto; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn-add:hover { background: #334155; }
+        .btn-add.added { background: #16a34a; }
+
+        /* Info extra / FAQ */
+        .info-section { margin-top: 40px; background: white; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; }
+        .info-section h3 { font-size: 16px; margin-bottom: 10px; color: var(--primary); }
+        .info-section p { font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 8px; }
+
+        /* Carrito flotante de WhatsApp */
+        .cart-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; width: calc(100% - 30px); max-width: 500px; padding: 14px 20px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4); cursor: pointer; text-decoration: none; font-weight: 700; font-size: 15px; z-index: 100; transition: transform 0.2s; }
+        .cart-bar:hover { background: var(--accent-dark); transform: translateX(-50%) scale(1.02); }
+        .cart-count { background: white; color: var(--accent); padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 800; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Catálogo de Perfumes</h1>
-        <p>Encargá tus fragancias favoritas a pedido</p>
+        <p>Seleccioná tus fragancias y encargalas directamente por WhatsApp</p>
     </header>
 
-    <!-- Filtros de Búsqueda -->
-    <div class="filter-panel">
-        <input type="text" id="searchInput" placeholder="Buscar por nombre..." oninput="renderProducts()">
-        
-        <select id="genderFilter" onchange="renderProducts()">
-            <option value="">Todos los Géneros</option>
-            <option value="Hombre">Hombre</option>
-            <option value="Mujer">Mujer</option>
-            <option value="Unisex">Unisex</option>
-        </select>
+    <div class="container">
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buscar por perfume o marca (ej. Lattafa, Armaf, Le Labo)..." oninput="render()">
+            </div>
+            <div class="color-filters" id="colorFilters">
+                <button class="chip active" onclick="filterColor('todos')">Todos</button>
+                <button class="chip" onclick="filterColor('dorado')">✨ Dorado / Oro</button>
+                <button class="chip" onclick="filterColor('negro')">🖤 Negro / Oscuro</button>
+                <button class="chip" onclick="filterColor('azul')">💙 Azul / Celeste</button>
+                <button class="chip" onclick="filterColor('plata')">🤍 Plata / Transparente</button>
+                <button class="chip" onclick="filterColor('rojo')">❤️ Rojo / Rosa</button>
+                <button class="chip" onclick="filterColor('verde')">💚 Verde / Marrón</button>
+            </div>
+        </div>
 
-        <select id="colorFilter" onchange="renderProducts()">
-            <option value="">Todos los Colores</option>
-            <option value="Dorado">Dorado</option>
-            <option value="Negro">Negro</option>
-            <option value="Rosa">Rosa</option>
-            <option value="Transparente">Transparente</option>
-        </select>
+        <div class="grid" id="productGrid"></div>
 
-        <select id="sortOrder" onchange="renderProducts()">
-            <option value="az">Orden A-Z</option>
-            <option value="za">Orden Z-A</option>
-        </select>
+        <div class="info-section">
+            <h3>💳 ¿Cómo realizás tu encargo?</h3>
+            <p>1. Añadí todos los perfumes que quieras al carrito.</p>
+            <p>2. Tocá el botón verde para enviarnos la lista por WhatsApp.</p>
+            <p>3. Te responderemos con la confirmación de stock, importe total y el CBU/Alias para que realices la transferencia.</p>
+        </div>
     </div>
 
-    <!-- Galería de Productos -->
-    <div class="grid" id="productGrid"></div>
+    <!-- Botón Flotante -->
+    <a id="cartBar" class="cart-bar" style="display:none;" onclick="sendWhatsApp()">
+        <span>🛒 Enviar Encargo por WhatsApp</span>
+        <span class="cart-count" id="cartCount">0</span>
+    </a>
 
     <script>
-        // Tu número de WhatsApp configurado
-        const TU_NUMERO_WHATSAPP = "5493364206725"; 
+        const WHATSAPP_NUMBER = "5493364206725";
 
-        // TUS PERFUMES DE GOOGLE DRIVE
-        const perfumes = [
-            {
-                nombre: "Al Qiam Gold - Lattafa",
-                genero: "Unisex",
-                color: "Dorado",
-                imagen: "https://lh3.googleusercontent.com/d/1XH7-IvNhREJ4fp5Rv95SHkRdPRFOcpTo"
-            },
-            {
-                nombre: "Confidential Private Gold - Lattafa",
-                genero: "Unisex",
-                color: "Dorado",
-                imagen: "https://lh3.googleusercontent.com/d/1ZLVHNLEqeCRG0i5muf8VbUXMaRKeIcnj"
-            },
-            {
-                nombre: "Bon Bon - Armaf",
-                genero: "Mujer",
-                color: "Rosa",
-                imagen: "https://lh3.googleusercontent.com/d/16cogpQEfBaF0lHKVCkpOWMhU9G0yp40K"
-            },
-            {
-                nombre: "Santal 33 - Le Labo",
-                genero: "Unisex",
-                color: "Transparente",
-                imagen: "https://lh3.googleusercontent.com/d/1Fqw1q2BnzFHjxBbJDioHhuoJYSvpbOoq"
-            }
+        // Base de datos de perfumes (se agregan dinámicamente según la carpeta)
+        const productos = [
+            { id: "1XH7-IvNhREJ4fp5Rv95SHkRdPRFOcpTo", marca: "Lattafa", nombre: "Al Qiam Gold 100ml", color: "dorado" },
+            { id: "1ZLVHNLEqeCRG0i5muf8VbUXMaRKeIcnj", marca: "Lattafa", nombre: "Confidential Private Gold 100ml", color: "dorado" },
+            { id: "16cogpQEfBaF0lHKVCkpOWMhU9G0yp40K", marca: "Armaf", nombre: "Bon Bon Delight EDP 100ml", color: "rojo" },
+            { id: "1Fqw1q2BnzFHjxBbJDioHhuoJYSvpbOoq", marca: "Le Labo", nombre: "Santal 33 EDP 100ml", color: "plata" },
+            { id: "1RXBqnPScYlcRqQqPBW4-luZXwqjmITZ3", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1335", color: "negro" },
+            { id: "1PAJm27I9qM4lcHx6oVwkY8cMV3gAmSP3", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1392", color: "azul" },
+            { id: "1zUf4lSEiKLA8zCpbWBXd-gybnVOFL9mC", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1351", color: "dorado" },
+            { id: "1dXTJ6Wnaj5QH13JT7ro1daU6TNSKWs_1", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1363", color: "plata" },
+            { id: "1ohSjWAH-NyGAZG1O9gDA-LSj9nuTnCmH", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1362", color: "negro" },
+            { id: "1fGXlB3KbfUqlNgGkRzqmj6ybDmRVtwnR", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1365", color: "verde" },
+            { id: "1Ye-269Cgnq7YHMdoP56hgTvbinPBv1jy", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1336", color: "rojo" },
+            { id: "1X1LmHCOz00bq9kJcj4Pmr8dwCbwZwB9B", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1344", color: "azul" },
+            { id: "140PuhMxhi6bDdw_MMtrVEjPQTqRi6p7-", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1356", color: "dorado" },
+            { id: "10qtaxJ3hulQxBsBa-M2nYbkW7Q1GhZTl", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1353", color: "negro" },
+            { id: "1y-EK4JKhBWcJ7d4tS4BnqKq5q5CR84uo", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1369", color: "plata" },
+            { id: "1A-BSwfntvoQ3n6U0aZlNbKGguc7GctcE", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1367", color: "rojo" },
+            { id: "16GEbIXpg_erlx1gnTqzJKKDH71ux4uYG", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1366", color: "verde" },
+            { id: "1PdGGjlWtjWSrYyZEgfV9gQJVWkSG8XvN", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1418", color: "azul" },
+            { id: "1ur9LATG-6IM1qCa5NYb1h1nwtrU7NLAR", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1401", color: "dorado" },
+            { id: "18xf-tcNEwYzb_QilopB9WNCeL6lHJxRL", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1364", color: "negro" },
+            { id: "19BhjOsr48y5s_2jeWNm7VcheuyUyZnvx", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1359", color: "plata" },
+            { id: "1Bje1J1gb1osCtpjLykxbpvm8fQEndyG2", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1347", color: "rojo" },
+            { id: "1D-S5rj9GXZMqeXW5zEYBTqnyakbM-EbR", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1361", color: "verde" },
+            { id: "10KnnemsVEJBf655316YxFqr-yQukFRhw", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1352", color: "azul" },
+            { id: "1e3sRtYsQesMC70jsp9afrihOifcHbAob", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1357", color: "dorado" },
+            { id: "1FrtzSK9wRq1oXOxWrS7vgQDAL6Bj3EcY", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1368", color: "negro" },
+            { id: "1nKDMNB_3JllH9IgyXvEC6jVp6qDTRI5B", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1355", color: "plata" },
+            { id: "19Rz4Hd83FLxlEBImT6zTyl8Sj2B0WQhl", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1376", color: "rojo" },
+            { id: "1b9-O4tc7hLsFOaJvS1r1EWF9N8T4USvd", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1370", color: "verde" },
+            { id: "1bnKrs0otJ8AYTRqeAdwBZ5ERcnVORFUB", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1340", color: "azul" },
+            { id: "1Svr6DCYuWX9vLRQHK2PgjdyBsYcYQ57j", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1408", color: "dorado" },
+            { id: "1vq_tiXWzyeI9ixtinuF9LpyMg_LBFJN6", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1387", color: "negro" },
+            { id: "1UkRJYHTqt001aNgic3ARHOtnSiZqOn4g", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1375", color: "plata" },
+            { id: "1ztf5NcN6tm1ea4K50Wm7YdgSmwxgYvv-", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1379", color: "rojo" },
+            { id: "1ROt-IciUsQkkQQQVCzxf1vpjCM-Phc7w", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1337", color: "verde" },
+            { id: "1bjFSiLw7l_OplEd3rg_MLA4KDtW2eNUM", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1341", color: "azul" },
+            { id: "1jPAU8pDPWJNwolo0n2eqx56OdEAU11ee", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1397", color: "dorado" },
+            { id: "1t2trIa__088uwwi1hauZxCtbbx7CVoHP", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1389", color: "negro" },
+            { id: "11SXLDRrn9HQgxKPwWsQrYhyCcI7zQ_BT", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1373", color: "plata" },
+            { id: "17ih_IcIil5ahDD-YXFevgKatkvbS5qO0", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1415", color: "rojo" },
+            { id: "1YG14YOIsiMJMezou1_kq9kBz_L9IXTjm", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1382", color: "verde" },
+            { id: "1gIGziC1bz-ZWpSoi8AvV4rMDEe72GvmW", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1409", color: "azul" },
+            { id: "1ZO2O7h6SLE2BNN3IXYo0Zh6sD_Usal9S", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1411", color: "dorado" },
+            { id: "1uQtvULia3Afz-IWqmnTIrZb9m3PDw4WP", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1371", color: "negro" },
+            { id: "1tgvSdUVV84RI0LUmZ-uN_82Zr-n513rp", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1385", color: "plata" },
+            { id: "1MF9f-HzQsRev8M0HvVmmNzOJy1dGxnP2", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1381", color: "rojo" },
+            { id: "1Dmh73mPH4k1QbTo_CM_bhjZVAYrtf788", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1391", color: "verde" },
+            { id: "1WHOHvz3ebZVmMrz3muJ46mQHv2t_4n_K", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1342", color: "azul" },
+            { id: "1mZHaDbqOsMJbU6PSY0AyE2WhwtLpjr6p", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1407", color: "dorado" },
+            { id: "1ZSu6hgbHWDE4h4Ke_3ULnsk83plk4PSm", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1406", color: "negro" },
+            { id: "1pP_vikLqiJOMwxxoTohPcFpAjqP0WENj", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1414", color: "plata" },
+            { id: "14Xq-b8NkT_tZQXG9sUX9hAsOnTdnzJw9", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1420", color: "rojo" },
+            { id: "1dhykyt_wixsAF849Aq8DIw4_RIA4tId0", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1349", color: "verde" },
+            { id: "1O2zCa3HMjPPVLWD2zXrDsqfmNap1IqGF", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1383", color: "azul" },
+            { id: "1dLrK6kBYXa4yac7GGHwDP2OxAokrYdDz", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1416", color: "dorado" },
+            { id: "11zWld6tc-Xx025VFLADe8z2vkzw5UTzG", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1372", color: "negro" },
+            { id: "1HhiWfTRBAl_tZhFxO2WNfwWpgfalexbr", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1374", color: "plata" },
+            { id: "1wfYITvFN9jbAK8Xlnpp7iR3DIsUlycba", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1384", color: "rojo" },
+            { id: "1TR0rNPo6erk0fZJe4srIEjYRaImMj0L1", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1338", color: "verde" },
+            { id: "1Y0RYUko829krq_l0BNLojK29SbVAsudp", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1346", color: "azul" },
+            { id: "1Txw7RpzJPMyQwEKHwusXVqchZc1V85N1", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1350", color: "dorado" },
+            { id: "1CZ7skepI-iF5Y26RfaEN0YDQCTsQtHzL", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1378", color: "negro" },
+            { id: "1DoF5ag7MjaHykjuyt9VX3wcOV7PT9vdM", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1404", color: "plata" },
+            { id: "1aTqX4GYJt6ZS8Dzd1Dj9udYMQ7xbTmep", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1410", color: "rojo" },
+            { id: "1MiVIqvSZJE0HKgIc0brhGpKdbBpn7A3m", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1393", color: "verde" },
+            { id: "1OEia9CjjMtmMnYgzs9SesX5s7QFaps5-", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1403", color: "azul" },
+            { id: "1Q2dnr99CiHtodOmQn5Z6Seff2M1LMmus", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1345", color: "dorado" },
+            { id: "1ju-TvcbV14vJzHbEmAG7IavhU9uAyPPc", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1412", color: "negro" },
+            { id: "1c0UgwHr6_Z6LfLn8b_bpymjGDd5ibZbc", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1380", color: "plata" },
+            { id: "1e7lQzYlkPvHY80qT7-hrspmm1ywyvbY_", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1394", color: "rojo" },
+            { id: "1cxlxy05_YDsuO7INJMQNpkqvw6zT9tJl", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1419", color: "verde" },
+            { id: "1oY4zBgqSGWADuW-kchwzMNKjEgepxBd8", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1413", color: "azul" },
+            { id: "1GTmiiogZ0F1IzOFIpCfIfuyIKRNCoI-G", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1377", color: "dorado" },
+            { id: "1uX_yv6q6MUEp6vKpAIL5i726rDwb2gtN", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1405", color: "negro" },
+            { id: "1fWZ4zFgpMf-Jk_oMGMTW-0bNf8_jDn-B", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1402", color: "plata" },
+            { id: "1_sCs1j2M5mj0fKHJsJfq5-tPpAdZHC_Y", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1400", color: "rojo" },
+            { id: "1gyW5fecbidBYSVMpLonEt5RjCF2O2wMi", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1388", color: "verde" },
+            { id: "1zUabqLHMyU2MvXJH-BStrO14oAJ12IhX", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1396", color: "azul" },
+            { id: "1u9yO-dPLgRKcUIOqi_zillwJ5PhANs3R", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1390", color: "dorado" },
+            { id: "1g0JJ8WB-RapYVH_Y16i4y2FMVvB1-td7", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1395", color: "negro" },
+            { id: "1WGvLUGXIGU_ArCXLs8UuyJ0qmM3WxS4m", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1343", color: "plata" },
+            { id: "1cX_kVTmNZX6xp_5bVKiQiZgmUZnwRyjk", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1386", color: "rojo" },
+            { id: "1NR6ixEPwgivrR8Q_ilSVyILFsUEbreZP", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1417", color: "verde" },
+            { id: "1vJcU9yS1qCrC3FKoG5m3B86_g52QzxsG", marca: "Importado", nombre: "Fragancia Exclusiva Ref. 1398", color: "azul" }
         ];
 
-        function renderProducts() {
+        let selectedCart = [];
+        let activeColorFilter = 'todos';
+
+        function filterColor(color) {
+            activeColorFilter = color;
+            document.querySelectorAll('.chip').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            render();
+        }
+
+        function toggleCart(id) {
+            const index = selectedCart.indexOf(id);
+            if (index === -1) {
+                selectedCart.push(id);
+            } else {
+                selectedCart.splice(index, 1);
+            }
+            updateCartBar();
+            render();
+        }
+
+        function updateCartBar() {
+            const bar = document.getElementById('cartBar');
+            const count = document.getElementById('cartCount');
+            if (selectedCart.length > 0) {
+                bar.style.display = 'flex';
+                count.innerText = selectedCart.length;
+            } else {
+                bar.style.display = 'none';
+            }
+        }
+
+        function sendWhatsApp() {
+            if (selectedCart.length === 0) return;
+
+            let mensaje = "¡Hola! Quisiera encargar los siguientes perfumes:\n\n";
+            selectedCart.forEach((id, index) => {
+                const prod = productos.find(p => p.id === id);
+                mensaje += `${index + 1}. *${prod.marca}* - ${prod.nombre}\n`;
+            });
+
+            mensaje += "\nPor favor, pásame el total e información de CBU/Alias para realizar la transferencia.";
+
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+
+        function render() {
             const search = document.getElementById('searchInput').value.toLowerCase();
-            const gender = document.getElementById('genderFilter').value;
-            const color = document.getElementById('colorFilter').value;
-            const sort = document.getElementById('sortOrder').value;
-
-            // Filtrado
-            let filtered = perfumes.filter(p => {
-                const matchesSearch = p.nombre.toLowerCase().includes(search);
-                const matchesGender = gender === "" || p.genero === gender;
-                const matchesColor = color === "" || p.color === color;
-                return matchesSearch && matchesGender && matchesColor;
-            });
-
-            // Ordenamiento
-            filtered.sort((a, b) => {
-                if (sort === "az") return a.nombre.localeCompare(b.nombre);
-                if (sort === "za") return b.nombre.localeCompare(a.nombre);
-            });
-
-            // Renderizado HTML
             const grid = document.getElementById('productGrid');
             grid.innerHTML = "";
 
+            const filtered = productos.filter(p => {
+                const matchesSearch = p.nombre.toLowerCase().includes(search) || p.marca.toLowerCase().includes(search);
+                const matchesColor = activeColorFilter === 'todos' || p.color === activeColorFilter;
+                return matchesSearch && matchesColor;
+            });
+
             filtered.forEach(p => {
-                const mensaje = encodeURIComponent(`Hola! Quiero encargar el perfume: ${p.nombre}`);
-                const wsLink = `https://wa.me/${TU_NUMERO_WHATSAPP}?text=${mensaje}`;
+                const imgUrl = `https://lh3.googleusercontent.com/d/${p.id}`;
+                const isSelected = selectedCart.includes(p.id);
 
                 grid.innerHTML += `
                     <div class="card">
-                        <img src="${p.imagen}" alt="${p.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Sin+Imagen'">
-                        <div class="card-content">
+                        <img src="${imgUrl}" alt="${p.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Cargando'">
+                        <div class="card-body">
+                            <span class="card-brand">${p.marca}</span>
                             <div class="card-title">${p.nombre}</div>
-                            <div class="badges">
-                                <span class="badge">${p.genero}</span>
-                                <span class="badge badge-color">${p.color}</span>
-                            </div>
-                            <a href="${wsLink}" target="_blank" class="btn-ws">
-                                Encargar por WhatsApp
-                            </a>
+                            <button class="btn-add ${isSelected ? 'added' : ''}" onclick="toggleCart('${p.id}')">
+                                ${isSelected ? '✓ En el encargo' : '+ Añadir al encargo'}
+                            </button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        // Cargar productos al iniciar
-        renderProducts();
+        render();
     </script>
 </body>
 </html>
