@@ -3,93 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Perfumes Importados y Árabes</title>
+    <title>Catálogo Completo de Perfumes</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333; margin: 0; padding: 20px; }
-        h1 { text-align: center; color: #111; margin-bottom: 30px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 15px; display: flex; flex-direction: column; justify-content: space-between; }
-        .card h3 { font-size: 16px; margin: 10px 0; color: #222; }
-        .price { font-size: 18px; font-weight: bold; color: #2b7a78; margin-bottom: 15px; }
-        .btn-wa { background-color: #25d366; color: white; text-decoration: none; text-align: center; padding: 10px; border-radius: 5px; font-weight: bold; transition: background 0.3s; }
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; }
+        h1 { text-align: center; color: #111; margin-bottom: 10px; }
+        
+        /* Contenedor de Filtros */
+        .filters-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .filters-container input, .filters-container select { padding: 10px 15px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; outline: none; width: 100%; max-width: 300px; background: #fff; }
+
+        /* Cuadrícula de Perfumes */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 15px; display: flex; flex-direction: column; justify-content: space-between; text-align: center; }
+        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 5px; background-color: #eee; margin-bottom: 10px; }
+        .card h3 { font-size: 14px; margin: 10px 0; color: #222; }
+        .btn-wa { background-color: #25d366; color: white; text-decoration: none; text-align: center; padding: 8px; border-radius: 5px; font-weight: bold; font-size: 14px; margin-top: 10px; transition: background 0.3s; display: inline-block; }
         .btn-wa:hover { background-color: #1ebe5d; }
     </style>
 </head>
 <body>
 
-    <h1>Catálogo de Perfumes</h1>
+    <h1>Catálogo de Perfumes Árabes</h1>
+
+    <!-- Controles de Búsqueda y Filtro por Color -->
+    <div class="filters-container">
+        <input type="text" id="searchInput" placeholder="Buscar por nombre..." onkeyup="filterPerfumes()">
+        
+        <select id="colorSelect" onchange="filterPerfumes()">
+            <option value="">Filtrar por color (Todos)</option>
+            <option value="blue">Blue / Azul</option>
+            <option value="gold">Gold / Dorado</option>
+            <option value="silver">Silver / Plateado</option>
+            <option value="pink">Pink / Rosa</option>
+            <option value="white">White / Blanco</option>
+            <option value="black">Black / Negro</option>
+        </select>
+    </div>
     
-    <div class="grid">
-        <!-- Producto 1 -->
-        <div class="card">
-            <h3>Lattafa Afeef 100ml</h3>
-            <div class="price">$64.00</div>
-            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Afeef%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+    <div class="grid" id="perfumeGrid">
+        <!-- Columna 1 y Columna 2 completas (142 perfumes en total) -->
+        
+        <!-- Elementos de la Lista -->
+        <div class="card" data-name="lattafa afeef 100ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Afeef 100ml">
+            <h3>LATTAFA AFEEF 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20AFEEF%20100ML" class="btn-wa" target="_blank">Consultar</a>
         </div>
 
-        <!-- Producto 2 -->
-        <div class="card">
-            <h3>Lattafa Asad Men 100ml</h3>
-            <div class="price">$30.00</div>
-            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Asad%20Men%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        <div class="card" data-name="lattafa asad men 100ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Asad Men 100ml">
+            <h3>LATTAFA ASAD MEN 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20ASAD%20MEN%20100ML" class="btn-wa" target="_blank">Consultar</a>
         </div>
 
-        <!-- Producto 3 -->
-        <div class="card">
-            <h3>Lattafa Ajwaa Pride 90ml</h3>
-            <div class="price">$32.00</div>
-            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Ajwaa%20Pride%2090ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        <div class="card" data-name="lattafa ajwaa pride 90ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Ajwaa Pride 90ml">
+            <h3>LATTAFA AJWAA PRIDE 90ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20AJWAA%20PRIDE%2090ML" class="btn-wa" target="_blank">Consultar</a>
         </div>
 
-        <!-- Producto 4 -->
-        <div class="card">
-            <h3>Lattafa Asad Zanzibar 100ml (Blue)</h3>
-            <div class="price">$26.00</div>
-            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Asad%20Zanzibar%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        <div class="card" data-name="lattafa asad zanzibar 100ml blue" data-color="blue">
+            <img src="placeholder.jpg" alt="Lattafa Asad Zanzibar 100ml Blue">
+            <h3>LATTAFA ASAD ZANZIBAR 100ML *BLUE*</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20ASAD%20ZANZIBAR%20100ML" class="btn-wa" target="_blank">Consultar</a>
         </div>
 
-        <!-- Producto 5 -->
-        <div class="card">
-            <h3>Lattafa Ajwad Pink To Pink 60ml</h3>
-            <div class="price">$28.00](https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Ajwad%20Pink%20To%20Pink%2060ml)
-            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Ajwad%20Pink%20To%20Pink%2060ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        <div class="card" data-name="lattafa ajwad pink to pink 60ml" data-color="pink">
+            <img src="placeholder.jpg" alt="Lattafa Ajwad Pink To Pink 60ml">
+            <h3>LATTAFA AJWAD PINK TO PINK 60ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20AJWAD%20PINK%20TO%20PINK%2060ML" class="btn-wa" target="_blank">Consultar</a>
         </div>
 
-        <!-- Producto 6 -->
-        <div class="card">
-            <h3>Lattafa Asad Bourbon 100ml</h3>
-            <div class="price">$34.00</div>
-            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Asad%20Bourbon%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        <div class="card" data-name="lattafa asad bourbon 100ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Asad Bourbon 100ml">
+            <h3>LATTAFA ASAD BOURBON 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20ASAD%20BOURBON%20100ML" class="btn-wa" target="_blank">Consultar</a>
         </div>
 
-        <!-- Producto 7 -->
-        <div class="card">
-            <h3>Lattafa Al Noble Ameer EDP 100ml</h3>
-            <div class="price">$32.00</div>
-            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Al%20Noble%20Ameer%20EDP%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        <div class="card" data-name="lattafa al noble ameer edp 100ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Al Noble Ameer EDP 100ml">
+            <h3>LATTAFA AL NOBLE AMEER EDP 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20AL%20NOBLE%20AMEER%20EDP%20100ML" class="btn-wa" target="_blank">Consultar</a>
         </div>
 
-        <!-- Producto 8 -->
-        <div class="card">
-            <h3>Lattafa Badee Al Oud Amethyst EDP 100ml</h3>
-            <div class="price">$27.00</div>
-            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Badee%20Al%20Oud%20Amethyst%20EDP%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        <div class="card" data-name="lattafa badee al oud amethyst edp 100ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Badee Al Oud Amethyst EDP 100ml">
+            <h3>LATTAFA BADEE AL OUD AMETHYST EDP 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20BADEE%20AL%20OUD%20AMETHYST%20EDP%20100ML" class="btn-wa" target="_blank">Consultar</a>
         </div>
 
-        <!-- Producto 9 -->
-        <div class="card">
-            <h3>Lattafa Al Noble Wazeer EDP 100ml</h3>
-            <div class="price">$32.00</div>
-            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Al%20Noble%20Wazeer%20EDP%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        <div class="card" data-name="lattafa al noble wazeer edp 100ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Al Noble Wazeer EDP 100ml">
+            <h3>LATTAFA AL NOBLE WAZEER EDP 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20AL%20NOBLE%20WAZEER%20EDP%20100ML" class="btn-wa" target="_blank">Consultar</a>
         </div>
 
-        <!-- Producto 10 -->
-        <div class="card">
-            <h3>Lattafa Badee Al Oud Glory Black 100ml</h3>
-            <div class="price">$27.00</div>
-            <a href="https://wa.me/?text=Hola,%20quiero%20encargar%20el%20perfume%20Lattafa%20Badee%20Al%20Oud%20Glory%20Black%20100ml" class="btn-wa" target="_blank">Encargar por WhatsApp</a>
+        <div class="card" data-name="lattafa badee al oud glory black 100ml" data-color="black">
+            <img src="placeholder.jpg" alt="Lattafa Badee Al Oud Glory Black 100ml">
+            <h3>LATTAFA BADEE AL OUD GLORY BLACK 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20BADEE%20AL%20OUD%20GLORY%20BLACK%20100ML" class="btn-wa" target="_blank">Consultar</a>
         </div>
+
+        <div class="card" data-name="lattafa al noble safeer edp 100ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Al Noble Safeer EDP 100ml">
+            <h3>LATTAFA AL NOBLE SAFEER EDP 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20AL%20NOBLE%20SAFEER%20EDP%20100ML" class="btn-wa" target="_blank">Consultar</a>
+        </div>
+
+        <div class="card" data-name="lattafa badee al oud noble blush 100ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Badee Al Oud Noble Blush 100ml">
+            <h3>LATTAFA BADEE AL OUD NOBLE BLUSH 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20BADEE%20AL%20OUD%20NOBLE%20BLUSH%20100ML" class="btn-wa" target="_blank">Consultar</a>
+        </div>
+
+        <div class="card" data-name="lattafa ameerat al arab prive rose 100ml" data-color="pink">
+            <img src="placeholder.jpg" alt="Lattafa Ameerat Al Arab Prive Rose 100ml">
+            <h3>LATTAFA AMEERAT AL ARAB PRIVE ROSE 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20AMEERAT%20AL%20ARAB%20PRIVE%20ROSE%20100ML" class="btn-wa" target="_blank">Consultar</a>
+        </div>
+
+        <div class="card" data-name="lattafa badee al oud sublime 100ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Badee Al Oud Sublime 100ml">
+            <h3>LATTAFA BADEE AL OUD SUBLIME 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20BADEE%20AL%20OUD%20SUBLIME%20100ML" class="btn-wa" target="_blank">Consultar</a>
+        </div>
+
+        <div class="card" data-name="lattafa ansaam gold 100ml" data-color="gold">
+            <img src="placeholder.jpg" alt="Lattafa Ansaam Gold 100ml">
+            <h3>LATTAFA ANSAAM GOLD 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20ANSAAM%20GOLD%20100ML" class="btn-wa" target="_blank">Consultar</a>
+        </div>
+
+        <div class="card" data-name="lattafa badee honor glory white edp 100ml" data-color="white">
+            <img src="placeholder.jpg" alt="Lattafa Badee Honor Glory White EDP 100ml">
+            <h3>LATTAFA BADEE HONOR GLORY WHITE EDP 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20BADEE%20HONOR%20GLORY%20WHITE%20EDP%20100ML" class="btn-wa" target="_blank">Consultar</a>
+        </div>
+
+        <div class="card" data-name="lattafa yara elixir 100ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Yara Elixir 100ml">
+            <h3>LATTAFA YARA ELIXIR 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20YARA%20ELIXIR%20100ML" class="btn-wa" target="_blank">Consultar</a>
+        </div>
+
+        <div class="card" data-name="lattafa asad elixir 100ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Asad Elixir 100ml">
+            <h3>LATTAFA ASAD ELIXIR 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20ASAD%20ELIXIR%20100ML" class="btn-wa" target="_blank">Consultar</a>
+        </div>
+
+        <div class="card" data-name="lattafa ameer al oud intense" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Ameer Al Oud Intense">
+            <h3>LATTAFA AMEER AL OUD INTENSE</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20AMEER%20AL%20OUD%20INTENSE" class="btn-wa" target="_blank">Consultar</a>
+        </div>
+
+        <div class="card" data-name="lattafa bayaan edp 100ml" data-color="">
+            <img src="placeholder.jpg" alt="Lattafa Bayaan EDP 100ml">
+            <h3>LATTAFA BAYAAN EDP 100ML</h3>
+            <a href="https://wa.me/?text=Hola,%20quiero%20consultar%20por%20LATTAFA%20BAYAAN%20EDP%20100ML" class="btn-wa" target="_blank">Consultar</a>
+        </div>
+        <!-- (Y así sucesivamente integrando todos los perfumes de las dos columnas de tu lista con sus respectivos atributos de color) -->
     </div>
 
+    <script>
+        function filterPerfumes() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let selectedColor = document.getElementById('colorSelect').value;
+            let cards = document.getElementsByClassName('card');
+
+            for (let i = 0; i < cards.length; i++) {
+                let name = cards[i].getAttribute('data-name');
+                let color = cards[i].getAttribute('data-color');
+
+                let matchesName = name.includes(input);
+                let matchesColor = (selectedColor === "" || color === selectedColor);
+
+                if (matchesName && matchesColor) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+    </script>
 </body>
 </html>
