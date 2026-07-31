@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Perfumes por Encargo</title>
+    <style>
+        :root {
+            --primary: #111;
+            --accent: #25D366;
+            --bg: #f8f9fa;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; padding: 20px; color: #333; }
+        header { text-align: center; margin-bottom: 30px; }
+        h1 { margin-bottom: 5px; }
+        p { color: #666; }
+
+        /* Panel de Filtros */
+        .filter-panel { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: center; margin-bottom: 25px; }
+        select, input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; outline: none; }
+        
+        /* Grid de Productos */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; flex-direction: column; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-3px); }
+        .card img { width: 100%; height: 220px; object-fit: cover; background: #eee; }
+        .card-content { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; }
+        .card-title { font-weight: bold; font-size: 16px; margin-bottom: 8px; }
+        .badges { display: flex; gap: 5px; margin-bottom: 12px; flex-wrap: wrap; }
+        .badge { font-size: 11px; padding: 3px 8px; border-radius: 12px; background: #eee; color: #555; }
+        .badge-color { background: #f0f0f0; border: 1px solid #ddd; }
+        .btn-ws { margin-top: auto; background: var(--accent); color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; text-decoration: none; text-align: center; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-ws:hover { background: #1eb857; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Catálogo de Perfumes</h1>
+        <p>Encargá tus fragancias favoritas a pedido</p>
+    </header>
+
+    <!-- Filtros de Búsqueda -->
+    <div class="filter-panel">
+        <input type="text" id="searchInput" placeholder="Buscar por nombre..." oninput="renderProducts()">
+        
+        <select id="genderFilter" onchange="renderProducts()">
+            <option value="">Todos los Géneros</option>
+            <option value="Hombre">Hombre</option>
+            <option value="Mujer">Mujer</option>
+            <option value="Unisex">Unisex</option>
+        </select>
+
+        <select id="colorFilter" onchange="renderProducts()">
+            <option value="">Todos los Colores</option>
+            <option value="Dorado">Dorado</option>
+            <option value="Negro">Negro</option>
+            <option value="Rosa">Rosa</option>
+            <option value="Transparente">Transparente</option>
+        </select>
+
+        <select id="sortOrder" onchange="renderProducts()">
+            <option value="az">Orden A-Z</option>
+            <option value="za">Orden Z-A</option>
+        </select>
+    </div>
+
+    <!-- Galería de Productos -->
+    <div class="grid" id="productGrid"></div>
+
+    <script>
+        // Tu número de WhatsApp configurado
+        const TU_NUMERO_WHATSAPP = "5493364206725"; 
+
+        // TUS PERFUMES DE GOOGLE DRIVE
+        const perfumes = [
+            {
+                nombre: "Al Qiam Gold - Lattafa",
+                genero: "Unisex",
+                color: "Dorado",
+                imagen: "https://lh3.googleusercontent.com/d/1XH7-IvNhREJ4fp5Rv95SHkRdPRFOcpTo"
+            },
+            {
+                nombre: "Confidential Private Gold - Lattafa",
+                genero: "Unisex",
+                color: "Dorado",
+                imagen: "https://lh3.googleusercontent.com/d/1ZLVHNLEqeCRG0i5muf8VbUXMaRKeIcnj"
+            },
+            {
+                nombre: "Bon Bon - Armaf",
+                genero: "Mujer",
+                color: "Rosa",
+                imagen: "https://lh3.googleusercontent.com/d/16cogpQEfBaF0lHKVCkpOWMhU9G0yp40K"
+            },
+            {
+                nombre: "Santal 33 - Le Labo",
+                genero: "Unisex",
+                color: "Transparente",
+                imagen: "https://lh3.googleusercontent.com/d/1Fqw1q2BnzFHjxBbJDioHhuoJYSvpbOoq"
+            }
+        ];
+
+        function renderProducts() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const gender = document.getElementById('genderFilter').value;
+            const color = document.getElementById('colorFilter').value;
+            const sort = document.getElementById('sortOrder').value;
+
+            // Filtrado
+            let filtered = perfumes.filter(p => {
+                const matchesSearch = p.nombre.toLowerCase().includes(search);
+                const matchesGender = gender === "" || p.genero === gender;
+                const matchesColor = color === "" || p.color === color;
+                return matchesSearch && matchesGender && matchesColor;
+            });
+
+            // Ordenamiento
+            filtered.sort((a, b) => {
+                if (sort === "az") return a.nombre.localeCompare(b.nombre);
+                if (sort === "za") return b.nombre.localeCompare(a.nombre);
+            });
+
+            // Renderizado HTML
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = "";
+
+            filtered.forEach(p => {
+                const mensaje = encodeURIComponent(`Hola! Quiero encargar el perfume: ${p.nombre}`);
+                const wsLink = `https://wa.me/${TU_NUMERO_WHATSAPP}?text=${mensaje}`;
+
+                grid.innerHTML += `
+                    <div class="card">
+                        <img src="${p.imagen}" alt="${p.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Sin+Imagen'">
+                        <div class="card-content">
+                            <div class="card-title">${p.nombre}</div>
+                            <div class="badges">
+                                <span class="badge">${p.genero}</span>
+                                <span class="badge badge-color">${p.color}</span>
+                            </div>
+                            <a href="${wsLink}" target="_blank" class="btn-ws">
+                                Encargar por WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Cargar productos al iniciar
+        renderProducts();
+    </script>
+</body>
+</html>
