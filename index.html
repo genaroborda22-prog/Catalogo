@@ -3,292 +3,421 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Perfumes Árabes por Encargo</title>
+    <title>Catálogo Completo de Perfumes</title>
     <style>
         :root {
-            --primary: #128c7e;
-            --primary-dark: #075e54;
-            --accent: #d4af37; /* Dorado elegante para perfumes */
-            --bg: #f9f9f9;
-            --text: #333;
-            --card-bg: #fff;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent-color: #d4af37;
+            --border-color: #333;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
-            padding: 0;
+            padding: 20px;
         }
 
         header {
-            background-color: #111;
-            color: var(--accent);
             text-align: center;
-            padding: 2rem 1rem;
-            border-bottom: 3px solid var(--accent);
+            margin-bottom: 30px;
         }
 
         header h1 {
-            margin: 0;
-            font-size: 2rem;
-            letter-spacing: 1px;
+            color: var(--accent-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
 
         header p {
-            color: #ccc;
-            margin-top: 0.5rem;
+            color: #888;
+            font-size: 1.1rem;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.5rem;
-        }
-
-        /* Sección de Ayuda / Cómo Comprar */
-        .info-section {
-            background: #fff;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border-left: 4px solid var(--accent);
-        }
-
-        .info-section h3 {
-            margin-top: 0;
-            color: var(--primary-dark);
-        }
-
-        .info-section ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-
-        /* Controles de Búsqueda y Filtros */
-        .controls {
+        .controls-container {
+            max-width: 900px;
+            margin: 0 auto 30px auto;
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            justify-content: space-between;
+            gap: 15px;
+            justify-content: center;
         }
 
-        .search-box, .filter-box {
+        .search-input, .filter-select {
             flex: 1;
-            min-width: 250px;
-        }
-
-        input[type="text"], select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            min-width: 200px;
+            padding: 12px 20px;
             font-size: 1rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            color: var(--text-color);
             outline: none;
+            transition: border-color 0.3s;
         }
 
-        input[type="text"]:focus, select:focus {
-            border-color: var(--primary);
+        .search-input:focus, .filter-select:focus {
+            border-color: var(--accent-color);
         }
 
-        /* Grilla de Productos */
-        .catalog-grid {
+        .filter-select option {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        .perfume-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
             display: flex;
             flex-direction: column;
-            transition: transform 0.2s ease;
+            align-items: center;
+            text-align: center;
+            gap: 10px;
+            cursor: pointer;
         }
 
-        .card:hover {
-            transform: translateY(-4px);
+        .perfume-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(212, 175, 55, 0.15);
+            border-color: var(--accent-color);
         }
 
-        .card-img {
+        .perfume-img-container {
+            width: 100%;
             height: 200px;
-            background-color: #eee;
+            background-color: #252525;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #888;
-            font-size: 0.9rem;
+            overflow: hidden;
+            position: relative;
         }
 
-        .card-body {
-            padding: 1.25rem;
+        .perfume-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s;
+        }
+
+        .perfume-card:hover .perfume-img {
+            transform: scale(1.05);
+        }
+
+        .perfume-info {
             display: flex;
-            flex-direction: column;
-            flex-grow: 1;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
         }
 
-        .card-title {
-            font-size: 1.1rem;
+        .perfume-number {
+            font-size: 1rem;
             font-weight: bold;
-            margin: 0 0 0.5rem 0;
-            color: #111;
+            color: var(--accent-color);
         }
 
-        .card-brand {
-            font-size: 0.85rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
+        .perfume-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.4;
         }
 
-        .card-desc {
-            font-size: 0.9rem;
-            color: #555;
-            flex-grow: 1;
-            margin-bottom: 1rem;
+        /* Modal de WhatsApp */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent-color);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .modal-content h3 {
+            color: var(--accent-color);
+            margin-top: 0;
+        }
+
+        .modal-content p {
+            font-size: 1.1rem;
+            margin: 15px 0;
+        }
+
+        .modal-content input {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background: #121212;
+            color: var(--text-color);
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
         }
 
         .btn-whatsapp {
-            background-color: var(--primary);
+            background-color: #25d366;
             color: white;
-            text-align: center;
-            padding: 0.75rem;
-            border-radius: 6px;
-            text-decoration: none;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+            cursor: pointer;
             transition: background 0.2s;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .btn-whatsapp:hover {
-            background-color: var(--primary-dark);
+            background-color: #1ebe5d;
         }
 
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: #777;
-            font-size: 0.9rem;
-            border-top: 1px solid #ddd;
-            margin-top: 3rem;
+        .btn-close {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-close:hover {
+            background-color: #444;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Perfumes Árabes - Catálogo por Encargo</h1>
-        <p>Fragancias exclusivas importadas directamente para vos</p>
+        <h1>Catálogo Completo de Perfumes</h1>
+        <p>Haz clic en cualquier perfume para realizar tu encargo por WhatsApp</p>
     </header>
 
-    <div class="container">
+    <div class="controls-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nombre..." onkeyup="filterPerfumes()">
+        
+        <select id="brandFilter" class="filter-select" onchange="filterPerfumes()">
+            <option value="">Filtrar por Modelo / Marca</option>
+            <option value="Afnan">Afnan</option>
+            <option value="Al Haramain">Al Haramain</option>
+            <option value="Lattafa">Lattafa</option>
+            <option value="Armaf">Armaf</option>
+            <option value="Rasasi">Rasasi</option>
+            <option value="Ajmal">Ajmal</option>
+            <option value="Maison Alhambra">Maison Alhambra</option>
+            <option value="Swiss Arabian">Swiss Arabian</option>
+            <option value="Paris Corner">Paris Corner</option>
+            <option value="Bharara">Bharara</option>
+        </select>
 
-        <!-- Sección Informativa -->
-        <div class="info-section">
-            <h3>¿Cómo realizar tu encargo?</h3>
-            <ul>
-                <li>Buscá o filtrá tu fragancia favorita en el catálogo de abajo.</li>
-                <li>Hacé clic en el botón <strong>"Encargar por WhatsApp"</strong> de la fragancia que desees.</li>
-                <li>Se abrirá un mensaje directo con tu número (+54 9 336 4206725) listo para coordinar seña y entrega.</li>
-            </ul>
-        </div>
-
-        <!-- Controles de Búsqueda y Filtros -->
-        <div class="controls">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Buscar por nombre de perfume..." onkeyup="filterCatalog()">
-            </div>
-            <div class="filter-box">
-                <select id="categoryFilter" onchange="filterCatalog()">
-                    <option value="">Todas las familias / géneros</option>
-                    <option value="Amaderado">Amaderado</option>
-                    <option value="Dulce / Oriental">Dulce / Oriental</option>
-                    <option value="Floral / Frutal">Floral / Frutal</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Grilla de Productos (Ejemplo integrado con el número nuevo) -->
-        <div class="catalog-grid" id="catalogGrid">
-            
-            <!-- Producto 1 -->
-            <div class="card" data-name="Asad Lattafa" data-category="Amaderado">
-                <div class="card-img">[ Imagen de Perfume ]</div>
-                <div class="card-body">
-                    <div class="card-brand">Lattafa</div>
-                    <h3 class="card-title">Asad</h3>
-                    <p class="card-desc">Notas especiadas, vainilla y maderas profundas. Excelente fijación.</p>
-                    <a href="https://wa.me/5493364206725?text=Hola,%20quiero%20encargar%20el%20perfume%20Asad%20de%20Lattafa%20que%20vi%20en%20la%20web." target="_blank" class="btn-whatsapp">
-                        Encargar por WhatsApp
-                    </a>
-                </div>
-            </div>
-
-            <!-- Producto 2 -->
-            <div class="card" data-name="Khamrah Lattafa" data-category="Dulce / Oriental">
-                <div class="card-img">[ Imagen de Perfume ]</div>
-                <div class="card-body">
-                    <div class="card-brand">Lattafa</div>
-                    <h3 class="card-title">Khamrah</h3>
-                    <p class="card-desc">Aroma dulce envolvente con notas de canela, dátiles y ámbar.</p>
-                    <a href="https://wa.me/5493364206725?text=Hola,%20quiero%20encargar%20el%20perfume%20Khamrah%20de%20Lattafa%20que%20vi%20en%20la%20web." target="_blank" class="btn-whatsapp">
-                        Encargar por WhatsApp
-                    </a>
-                </div>
-            </div>
-
-            <!-- Producto 3 -->
-            <div class="card" data-name="Club de Nuit Intense Armaf" data-category="Amaderado">
-                <div class="card-img">[ Imagen de Perfume ]</div>
-                <div class="card-body">
-                    <div class="card-brand">Armaf</div>
-                    <h3 class="card-title">Club de Nuit Intense Man</h3>
-                    <p class="card-desc">Notas cítricas iniciales con un fondo amaderado y ahumado inconfundible.</p>
-                    <a href="https://wa.me/5493364206725?text=Hola,%20quiero%20encargar%20el%20perfume%20Club%20de%20Nuit%20Intense%20de%20Armaf%20que%20vi%20en%20la%20web." target="_blank" class="btn-whatsapp">
-                        Encargar por WhatsApp
-                    </a>
-                </div>
-            </div>
-
-        </div>
-
+        <select id="colorFilter" class="filter-select" onchange="filterPerfumes()">
+            <option value="">Filtrar por Color / Edición</option>
+            <option value="Gold">Gold / Dorado</option>
+            <option value="Silver">Silver / Plata</option>
+            <option value="Black">Black / Negro</option>
+            <option value="Blue">Blue / Azul</option>
+            <option value="White">White / Blanco</option>
+            <option value="Red">Red / Rojo</option>
+            <option value="Rose">Rose / Rosa</option>
+            <option value="Aqua">Aqua</option>
+        </select>
     </div>
 
-    <footer>
-        <p>&copy; 2026 - Catálogo de Perfumes Árabes. Todos los derechos reservados.</p>
-    </footer>
+    <div class="grid-container" id="perfumeGrid">
+        <!-- 1 -->
+        <div class="perfume-card" data-name="Afnan 9PM" data-brand="Afnan" data-color="" onclick="openModal('Afnan 9PM')"><div class="perfume-img-container"><img src="images/afnan_9pm.jpg" alt="Afnan 9PM" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">1</span><span class="perfume-name">Afnan 9PM</span></div></div>
+        <!-- 2 -->
+        <div class="perfume-card" data-name="Afnan 9PM Rebel" data-brand="Afnan" data-color="" onclick="openModal('Afnan 9PM Rebel')"><div class="perfume-img-container"><img src="images/afnan_9pm_rebel.jpg" alt="Afnan 9PM Rebel" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">2</span><span class="perfume-name">Afnan 9PM Rebel</span></div></div>
+        <!-- 3 -->
+        <div class="perfume-card" data-name="Afnan 9PK" data-brand="Afnan" data-color="" onclick="openModal('Afnan 9PK')"><div class="perfume-img-container"><img src="images/afnan_9pk.jpg" alt="Afnan 9PK" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">3</span><span class="perfume-name">Afnan 9PK</span></div></div>
+        <!-- 4 -->
+        <div class="perfume-card" data-name="Al Haramain Amber Oud Aqua Edition" data-brand="Al Haramain" data-color="Aqua" onclick="openModal('Al Haramain Amber Oud Aqua Edition')"><div class="perfume-img-container"><img src="images/amber_oud_aqua.jpg" alt="Al Haramain Amber Oud Aqua Edition" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">4</span><span class="perfume-name">Al Haramain Amber Oud Aqua Edition</span></div></div>
+        <!-- 5 -->
+        <div class="perfume-card" data-name="Al Haramain Amber Oud Bleu Edition" data-brand="Al Haramain" data-color="Blue" onclick="openModal('Al Haramain Amber Oud Bleu Edition')"><div class="perfume-img-container"><img src="images/amber_oud_bleu.jpg" alt="Al Haramain Amber Oud Bleu Edition" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">5</span><span class="perfume-name">Al Haramain Amber Oud Bleu Edition</span></div></div>
+        <!-- 6 -->
+        <div class="perfume-card" data-name="Al Haramain Amber Oud Carbon Edition" data-brand="Al Haramain" data-color="" onclick="openModal('Al Haramain Amber Oud Carbon Edition')"><div class="perfume-img-container"><img src="images/amber_oud_carbon.jpg" alt="Al Haramain Amber Oud Carbon Edition" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">6</span><span class="perfume-name">Al Haramain Amber Oud Carbon Edition</span></div></div>
+        <!-- 7 -->
+        <div class="perfume-card" data-name="Al Haramain Amber Oud Dubai Night" data-brand="Al Haramain" data-color="" onclick="openModal('Al Haramain Amber Oud Dubai Night')"><div class="perfume-img-container"><img src="images/amber_oud_dubai_night.jpg" alt="Al Haramain Amber Oud Dubai Night" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">7</span><span class="perfume-name">Al Haramain Amber Oud Dubai Night</span></div></div>
+        <!-- 8 -->
+        <div class="perfume-card" data-name="Al Haramain Amber Oud Gold Edition" data-brand="Al Haramain" data-color="Gold" onclick="openModal('Al Haramain Amber Oud Gold Edition')"><div class="perfume-img-container"><img src="images/amber_oud_gold.jpg" alt="Al Haramain Amber Oud Gold Edition" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">8</span><span class="perfume-name">Al Haramain Amber Oud Gold Edition</span></div></div>
+        <!-- 9 -->
+        <div class="perfume-card" data-name="Al Haramain Amber Oud Gold Edition Extreme" data-brand="Al Haramain" data-color="Gold" onclick="openModal('Al Haramain Amber Oud Gold Edition Extreme')"><div class="perfume-img-container"><img src="images/amber_oud_gold_extreme.jpg" alt="Al Haramain Amber Oud Gold Edition Extreme" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">9</span><span class="perfume-name">Al Haramain Amber Oud Gold Edition Extreme</span></div></div>
+        <!-- 10 -->
+        <div class="perfume-card" data-name="Al Haramain Amber Oud Private Edition" data-brand="Al Haramain" data-color="" onclick="openModal('Al Haramain Amber Oud Private Edition')"><div class="perfume-img-container"><img src="images/amber_oud_private.jpg" alt="Al Haramain Amber Oud Private Edition" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">10</span><span class="perfume-name">Al Haramain Amber Oud Private Edition</span></div></div>
+        <!-- 11 -->
+        <div class="perfume-card" data-name="Al Haramain Amber Oud Rose Edition" data-brand="Al Haramain" data-color="Rose" onclick="openModal('Al Haramain Amber Oud Rose Edition')"><div class="perfume-img-container"><img src="images/amber_oud_rose.jpg" alt="Al Haramain Amber Oud Rose Edition" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">11</span><span class="perfume-name">Al Haramain Amber Oud Rose Edition</span></div></div>
+        <!-- 12 -->
+        <div class="perfume-card" data-name="Al Haramain Amber Oud Ruby Edition" data-brand="Al Haramain" data-color="Red" onclick="openModal('Al Haramain Amber Oud Ruby Edition')"><div class="perfume-img-container"><img src="images/amber_oud_ruby.jpg" alt="Al Haramain Amber Oud Ruby Edition" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">12</span><span class="perfume-name">Al Haramain Amber Oud Ruby Edition</span></div></div>
+        <!-- 13 -->
+        <div class="perfume-card" data-name="Al Haramain Amber Oud Tobacco Edition" data-brand="Al Haramain" data-color="" onclick="openModal('Al Haramain Amber Oud Tobacco Edition')"><div class="perfume-img-container"><img src="images/amber_oud_tobacco.jpg" alt="Al Haramain Amber Oud Tobacco Edition" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">13</span><span class="perfume-name">Al Haramain Amber Oud Tobacco Edition</span></div></div>
+        <!-- 14 -->
+        <div class="perfume-card" data-name="Al Haramain Amber Oud Ultra Violet" data-brand="Al Haramain" data-color="" onclick="openModal('Al Haramain Amber Oud Ultra Violet')"><div class="perfume-img-container"><img src="images/amber_oud_ultraviolet.jpg" alt="Al Haramain Amber Oud Ultra Violet" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">14</span><span class="perfume-name">Al Haramain Amber Oud Ultra Violet</span></div></div>
+        <!-- 15 -->
+        <div class="perfume-card" data-name="Al Haramain Amber Oud White Edition" data-brand="Al Haramain" data-color="White" onclick="openModal('Al Haramain Amber Oud White Edition')"><div class="perfume-img-container"><img src="images/amber_oud_white.jpg" alt="Al Haramain Amber Oud White Edition" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">15</span><span class="perfume-name">Al Haramain Amber Oud White Edition</span></div></div>
+        <!-- 16 -->
+        <div class="perfume-card" data-name="Al Haramain L'Aventure" data-brand="Al Haramain" data-color="" onclick="openModal('Al Haramain L\'Aventure')"><div class="perfume-img-container"><img src="images/laventure.jpg" alt="Al Haramain L'Aventure" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">16</span><span class="perfume-name">Al Haramain L'Aventure</span></div></div>
+        <!-- 17 -->
+        <div class="perfume-card" data-name="Al Haramain L'Aventure Blanche" data-brand="Al Haramain" data-color="White" onclick="openModal('Al Haramain L\'Aventure Blanche')"><div class="perfume-img-container"><img src="images/laventure_blanche.jpg" alt="Al Haramain L'Aventure Blanche" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">17</span><span class="perfume-name">Al Haramain L'Aventure Blanche</span></div></div>
+        <!-- 18 -->
+        <div class="perfume-card" data-name="Al Haramain L'Aventure Femme" data-brand="Al Haramain" data-color="" onclick="openModal('Al Haramain L\'Aventure Femme')"><div class="perfume-img-container"><img src="images/laventure_femme.jpg" alt="Al Haramain L'Aventure Femme" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">18</span><span class="perfume-name">Al Haramain L'Aventure Femme</span></div></div>
+        <!-- 19 -->
+        <div class="perfume-card" data-name="Al Haramain L'Aventure Knight" data-brand="Al Haramain" data-color="" onclick="openModal('Al Haramain L\'Aventure Knight')"><div class="perfume-img-container"><img src="images/laventure_knight.jpg" alt="Al Haramain L'Aventure Knight" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">19</span><span class="perfume-name">Al Haramain L'Aventure Knight</span></div></div>
+        <!-- 20 -->
+        <div class="perfume-card" data-name="Al Haramain Portfolio Neroli Canvas" data-brand="Al Haramain" data-color="" onclick="openModal('Al Haramain Portfolio Neroli Canvas')"><div class="perfume-img-container"><img src="images/portfolio_neroli.jpg" alt="Al Haramain Portfolio Neroli Canvas" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">20</span><span class="perfume-name">Al Haramain Portfolio Neroli Canvas</span></div></div>
+        <!-- 21 -->
+        <div class="perfume-card" data-name="Al Qiam Silver Lattafa Pride" data-brand="Lattafa" data-color="Silver" onclick="openModal('Al Qiam Silver Lattafa Pride')"><div class="perfume-img-container"><img src="images/al_qiam_silver.jpg" alt="Al Qiam Silver Lattafa Pride" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">21</span><span class="perfume-name">Al Qiam Silver Lattafa Pride</span></div></div>
+        <!-- 22 -->
+        <div class="perfume-card" data-name="Al Noble Ameer Lattafa" data-brand="Lattafa" data-color="" onclick="openModal('Al Noble Ameer Lattafa')"><div class="perfume-img-container"><img src="images/al_noble_ameer.jpg" alt="Al Noble Ameer Lattafa" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">22</span><span class="perfume-name">Al Noble Ameer Lattafa</span></div></div>
+        <!-- 23 -->
+        <div class="perfume-card" data-name="Ameer Al Arab" data-brand="Lattafa" data-color="" onclick="openModal('Ameer Al Arab')"><div class="perfume-img-container"><img src="images/ameer_al_arab.jpg" alt="Ameer Al Arab" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">23</span><span class="perfume-name">Ameer Al Arab</span></div></div>
+        <!-- 24 -->
+        <div class="perfume-card" data-name="Ameer Al Arab Prince of Arabia" data-brand="Lattafa" data-color="" onclick="openModal('Ameer Al Arab Prince of Arabia')"><div class="perfume-img-container"><img src="images/ameer_al_arab_prince.jpg" alt="Ameer Al Arab Prince of Arabia" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">24</span><span class="perfume-name">Ameer Al Arab Prince of Arabia</span></div></div>
+        <!-- 25 -->
+        <div class="perfume-card" data-name="Ansaam Silver Lattafa Pride" data-brand="Lattafa" data-color="Silver" onclick="openModal('Ansaam Silver Lattafa Pride')"><div class="perfume-img-container"><img src="images/ansaam_silver.jpg" alt="Ansaam Silver Lattafa Pride" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">25</span><span class="perfume-name">Ansaam Silver Lattafa Pride</span></div></div>
+        <!-- 26 -->
+        <div class="perfume-card" data-name="Armaf Bucephalus No. IX" data-brand="Armaf" data-color="" onclick="openModal('Armaf Bucephalus No. IX')"><div class="perfume-img-container"><img src="images/bucephalus_9.jpg" alt="Armaf Bucephalus No. IX" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">26</span><span class="perfume-name">Armaf Bucephalus No. IX</span></div></div>
+        <!-- 27 -->
+        <div class="perfume-card" data-name="Armaf Bucephalus No. X" data-brand="Armaf" data-color="" onclick="openModal('Armaf Bucephalus No. X')"><div class="perfume-img-container"><img src="images/bucephalus_10.jpg" alt="Armaf Bucephalus No. X" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">27</span><span class="perfume-name">Armaf Bucephalus No. X</span></div></div>
+        <!-- 28 -->
+        <div class="perfume-card" data-name="Armaf Bucephalus No. XI" data-brand="Armaf" data-color="" onclick="openModal('Armaf Bucephalus No. XI')"><div class="perfume-img-container"><img src="images/bucephalus_11.jpg" alt="Armaf Bucephalus No. XI" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">28</span><span class="perfume-name">Armaf Bucephalus No. XI</span></div></div>
+        <!-- 29 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Iconic" data-brand="Armaf" data-color="Blue" onclick="openModal('Armaf Club de Nuit Iconic')"><div class="perfume-img-container"><img src="images/cdn_iconic.jpg" alt="Armaf Club de Nuit Iconic" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">29</span><span class="perfume-name">Armaf Club de Nuit Iconic</span></div></div>
+        <!-- 30 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Imperiale" data-brand="Armaf" data-color="Rose" onclick="openModal('Armaf Club de Nuit Imperiale')"><div class="perfume-img-container"><img src="images/cdn_imperiale.jpg" alt="Armaf Club de Nuit Imperiale" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">30</span><span class="perfume-name">Armaf Club de Nuit Imperiale</span></div></div>
+        <!-- 31 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Intense Man" data-brand="Armaf" data-color="Black" onclick="openModal('Armaf Club de Nuit Intense Man')"><div class="perfume-img-container"><img src="images/cdn_intense_man.jpg" alt="Armaf Club de Nuit Intense Man" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">31</span><span class="perfume-name">Armaf Club de Nuit Intense Man</span></div></div>
+        <!-- 32 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Lionheart" data-brand="Armaf" data-color="" onclick="openModal('Armaf Club de Nuit Lionheart')"><div class="perfume-img-container"><img src="images/cdn_lionheart.jpg" alt="Armaf Club de Nuit Lionheart" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">32</span><span class="perfume-name">Armaf Club de Nuit Lionheart</span></div></div>
+        <!-- 33 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Maleka" data-brand="Armaf" data-color="" onclick="openModal('Armaf Club de Nuit Maleka')"><div class="perfume-img-container"><img src="images/cdn_maleka.jpg" alt="Armaf Club de Nuit Maleka" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">33</span><span class="perfume-name">Armaf Club de Nuit Maleka</span></div></div>
+        <!-- 34 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Milestone" data-brand="Armaf" data-color="" onclick="openModal('Armaf Club de Nuit Milestone')"><div class="perfume-img-container"><img src="images/cdn_milestone.jpg" alt="Armaf Club de Nuit Milestone" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">34</span><span class="perfume-name">Armaf Club de Nuit Milestone</span></div></div>
+        <!-- 35 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Private Key To My Life" data-brand="Armaf" data-color="" onclick="openModal('Armaf Club de Nuit Private Key To My Life')"><div class="perfume-img-container"><img src="images/cdn_private_key_life.jpg" alt="Armaf Club de Nuit Private Key To My Life" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">35</span><span class="perfume-name">Armaf Club de Nuit Private Key To My Life</span></div></div>
+        <!-- 36 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Private Key To My Paris" data-brand="Armaf" data-color="" onclick="openModal('Armaf Club de Nuit Private Key To My Paris')"><div class="perfume-img-container"><img src="images/cdn_private_key_paris.jpg" alt="Armaf Club de Nuit Private Key To My Paris" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">36</span><span class="perfume-name">Armaf Club de Nuit Private Key To My Paris</span></div></div>
+        <!-- 37 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Private Key To My Soul" data-brand="Armaf" data-color="" onclick="openModal('Armaf Club de Nuit Private Key To My Soul')"><div class="perfume-img-container"><img src="images/cdn_private_key_soul.jpg" alt="Armaf Club de Nuit Private Key To My Soul" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">37</span><span class="perfume-name">Armaf Club de Nuit Private Key To My Soul</span></div></div>
+        <!-- 38 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Sillage" data-brand="Armaf" data-color="Silver" onclick="openModal('Armaf Club de Nuit Sillage')"><div class="perfume-img-container"><img src="images/cdn_sillage.jpg" alt="Armaf Club de Nuit Sillage" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">38</span><span class="perfume-name">Armaf Club de Nuit Sillage</span></div></div>
+        <!-- 39 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Untold" data-brand="Armaf" data-color="Red" onclick="openModal('Armaf Club de Nuit Untold')"><div class="perfume-img-container"><img src="images/cdn_untold.jpg" alt="Armaf Club de Nuit Untold" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">39</span><span class="perfume-name">Armaf Club de Nuit Untold</span></div></div>
+        <!-- 40 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Urban Man" data-brand="Armaf" data-color="" onclick="openModal('Armaf Club de Nuit Urban Man')"><div class="perfume-img-container"><img src="images/cdn_urban_man.jpg" alt="Armaf Club de Nuit Urban Man" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">40</span><span class="perfume-name">Armaf Club de Nuit Urban Man</span></div></div>
+        <!-- 41 -->
+        <div class="perfume-card" data-name="Armaf Club de Nuit Urban Man Elixir" data-brand="Armaf" data-color="" onclick="openModal('Armaf Club de Nuit Urban Man Elixir')"><div class="perfume-img-container"><img src="images/cdn_urban_man_elixir.jpg" alt="Armaf Club de Nuit Urban Man Elixir" class="perfume-img" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=400&q=80';"></div><div class="perfume-info"><span class="perfume-number">41</span><span class="perfume-name">Armaf Club de Nuit Urban Man Elixir</span></div></div>
+    </div>
+
+    <!-- Modal HTML -->
+    <div class="modal-overlay" id="whatsappModal">
+        <div class="modal-content">
+            <h3>Encargar Perfume</h3>
+            <p id="modalPerfumeName">Nombre del Perfume</p>
+            <a id="whatsappLink" href="#" target="_blank" class="btn-whatsapp">Enviar a WhatsApp</a>
+            <br><br>
+            <button class="btn-close" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
 
     <script>
-        // Script simple y rápido para el buscador y filtros en tiempo real
-        function filterCatalog() {
+        // REEMPLAZA ESTE NÚMERO CON TU NÚMERO DE WHATSAPP (código de país + área + número, sin signos ni espacios)
+        const WHATSAPP_NUMBER = "5493364000000"; 
+
+        function openModal(perfumeName) {
+            const modal = document.getElementById('whatsappModal');
+            const nameEl = document.getElementById('modalPerfumeName');
+            const linkEl = document.getElementById('whatsappLink');
+
+            nameEl.textContent = perfumeName;
+            
+            const message = encodeURIComponent(`Hola! Me interesa encargar el siguiente perfume: *${perfumeName}*. ¿Me darías más información?`);
+            linkEl.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('whatsappModal');
+            modal.style.display = 'none';
+        }
+
+        function filterPerfumes() {
             const searchInput = document.getElementById('searchInput').value.toLowerCase();
-            const categoryFilter = document.getElementById('categoryFilter').value;
-            const cards = document.querySelectorAll('.card');
+            const brandFilter = document.getElementById('brandFilter').value;
+            const colorFilter = document.getElementById('colorFilter').value;
+            const cards = document.querySelectorAll('.perfume-card');
 
             cards.forEach(card => {
                 const name = card.getAttribute('data-name').toLowerCase();
-                const category = card.getAttribute('data-category');
+                const brand = card.getAttribute('data-brand');
+                const color = card.getAttribute('data-color');
 
                 const matchesSearch = name.includes(searchInput);
-                const matchesCategory = categoryFilter === "" || category === categoryFilter;
+                const matchesBrand = brandFilter === "" || brand === brandFilter;
+                const matchesColor = colorFilter === "" || color === colorFilter;
 
-                if (matchesSearch && matchesCategory) {
-                    card.style.display = "flex";
+                if (matchesSearch && matchesBrand && matchesColor) {
+                    card.style.display = 'flex';
                 } else {
-                    card.style.display = "none";
+                    card.style.display = 'none';
                 }
             });
         }
-    </script>
 
+        // Cerrar modal al hacer clic fuera del contenido
+        window.onclick = function(event) {
+            const modal = document.getElementById('whatsappModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>
